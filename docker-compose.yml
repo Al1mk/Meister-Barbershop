@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    image: ghcr.io/al1mk/meister-backend:latest
+    env_file:
+      - backend/.env
+    volumes:
+      - media_data:/app/media
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE: ${VITE_API_BASE:-/api}
+    image: ghcr.io/al1mk/meister-frontend:latest
+    restart: unless-stopped
+
+  reverse-proxy:
+    build:
+      context: ./deploy/reverse-proxy
+    image: ghcr.io/al1mk/meister-reverse-proxy:latest
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+volumes:
+  media_data:

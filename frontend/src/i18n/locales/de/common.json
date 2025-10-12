@@ -1,0 +1,202 @@
+{
+  "brand": "Meister Barbershop",
+  "nav": {
+    "home": "Startseite",
+    "booking": "Buchung",
+    "contact": "Kontakt"
+  },
+  "languageSwitcher": {
+    "label": "Sprache",
+    "languages": {
+      "en": "Englisch",
+      "de": "Deutsch"
+    }
+  },
+  "footer": {
+    "address": "Deutschland, Erlangen, Hauptstraße 12 — Meister Barbershop",
+    "open": "Geöffnet Mo–Sa"
+  },
+  "home": {
+    "badge": "Meister • Bronze Line",
+    "title": "Buche deinen nächsten Haarschnitt online",
+    "subtitle": "Montag bis Samstag, jeweils einstündige Termine.",
+    "bookCta": "Termin buchen",
+    "locationCta": "Standort anzeigen",
+    "features": {
+      "quality": {
+        "title": "Qualität",
+        "description": "Premium-Styling in entspannter Atmosphäre."
+      },
+      "speed": {
+        "title": "Tempo",
+        "description": "Pünktlich ohne Hektik."
+      },
+      "hygiene": {
+        "title": "Hygiene",
+        "description": "Saubere Werkzeuge und frische Handtücher für jeden Gast."
+      }
+    },
+    "locationTitle": "Standort",
+    "locationDetail": "Deutschland, Erlangen, Hauptstraße 12 — Meister Barbershop",
+    "directionsCta": "Route planen",
+    "studentOffer": {
+      "title": "🎓 Studentenangebot am Dienstag",
+      "subtitle": "Haarschnitte nur 15€ jeden Dienstag.",
+      "note": "Vergiss nicht, deinen Studentenausweis mitzubringen!"
+    },
+    "reviews": {
+      "title": "Was Kunden auf Google sagen",
+      "cta": "Alle auf Google ansehen",
+      "ratingLabel": "{{rating}} von 5",
+      "totalLabel": "{{count, number}} Google-Bewertungen",
+      "readMore": "Mehr auf Google lesen",
+      "error": "Google-Bewertungen konnten gerade nicht geladen werden.",
+      "empty": "Sobald Bewertungen verfügbar sind, erscheinen sie hier.",
+      "prev": "Vorherige Bewertungen",
+      "next": "Nächste Bewertungen"
+    }
+  },
+  "booking": {
+    "title": "Termin buchen",
+    "step": "Schritt {{current}} von {{total}}",
+    "selectDateLabel": "Datum (Mo–Sa)",
+    "weekdayLabel": "({{weekday}})",
+    "closedSunday": "Am Sonntag geschlossen.",
+    "barberUnavailable": "Dieser Friseur arbeitet an diesem Tag nicht.",
+    "availableSlots": "Verfügbare Zeiten",
+    "services": {
+      "label": "Dienst auswählen",
+      "helper": "Die Dauer bestimmt, welche Zeiten verfügbar sind.",
+      "haircut": {
+        "title": "Haarschnitt",
+        "duration": "40 Minuten"
+      },
+      "hair_beard": {
+        "title": "Haare & Bart",
+        "duration": "60 Minuten"
+      }
+    },
+    "customer": {
+      "name": "Vollständiger Name",
+      "email": "E-Mail",
+      "phone": "Telefonnummer",
+      "helper": "Name, E-Mail-Adresse und Telefonnummer werden für die Buchung benötigt."
+    },
+    "summary": {
+      "title": "Übersicht",
+      "barber": "Friseur",
+      "date": "Datum",
+      "time": "Uhrzeit",
+      "service": "Leistung"
+    },
+    "final": {
+      "title": "Letzte Bestätigung",
+      "description": "Mit \"Bestätigen\" wird der Termin gespeichert."
+    },
+    "buttons": {
+      "previous": "Zurück",
+      "next": "Weiter",
+      "review": "Überprüfen",
+      "confirm": "Termin bestätigen",
+      "select": "Auswählen",
+      "selected": "Ausgewählt"
+    },
+    "loading": "Termin wird gebucht…",
+    "errors": {
+      "loadBarbers": "Die Liste der Friseure konnte nicht geladen werden.",
+      "loadSlots": "Die verfügbaren Zeiten konnten nicht geladen werden.",
+      "missingFields": "Bitte gib Name, E-Mail-Adresse und Telefonnummer ohne zusätzliche Leerzeichen ein.",
+      "generic": "Etwas ist schiefgelaufen."
+    },
+    "barberCard": {
+      "description": "Individuelle Leistungen (40–60 Minuten)",
+      "altFallback": "Portrait des Barbiers"
+    },
+    "barbers": {
+      "book": "Buchen",
+      "bookLabel": "Termin mit {{name}} buchen",
+      "availabilityLabel": "Verfügbarkeit",
+      "taglineLabel": "Schwerpunkt",
+      "details": {
+        "default": {
+          "tagline": "Professionelle Pflege, ganz nach dir",
+          "availability": "Nach Vereinbarung"
+        },
+        "ehsan": {
+          "tagline": "Präzise Fades & Detailarbeit",
+          "availability": "Mo–Sa"
+        },
+        "iman": {
+          "tagline": "Moderne Styles und Bartpflege",
+          "availability": "Mo–Sa"
+        },
+        "javad": {
+          "tagline": "Klassische Schnitte mit ruhiger Hand",
+          "availability": "Mo–Sa"
+        },
+        "ali": {
+          "tagline": "Kreative Looks & Stylingtipps",
+          "availability": "Mo–Sa"
+        },
+        "reza": {
+          "tagline": "Wochenendspezialist für markante Fades",
+          "availability": "Fr–Sa"
+        }
+      }
+    },
+    "calendar": {
+      "past": "Vergangener Tag",
+      "closed": "Geschlossen",
+      "barberUnavailable": "Barbier nicht verfügbar",
+      "fullyBooked": "Ausgebucht",
+      "loading": "Verfügbarkeit wird geladen…",
+      "available": "{{count}} Termin frei",
+      "available_plural": "{{count}} Termine frei",
+      "previousMonth": "Vorheriger Monat",
+      "nextMonth": "Nächster Monat",
+      "loadingInline": "Verfügbarkeit wird geladen…",
+      "error": "Verfügbarkeit konnte nicht geladen werden. Bitte wähle ein anderes Datum.",
+      "hint": "Wähle einen Tag, um freie Zeiten zu sehen."
+    }
+  },
+  "contact": {
+    "title": "Kontaktiere uns",
+    "name": "Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "message": "Nachricht",
+    "submit": "Senden",
+    "sending": "Wird gesendet…",
+    "success": "Danke! Wir haben deine Nachricht erhalten.",
+    "error": "Die Nachricht konnte nicht gesendet werden.",
+    "helper": "Bitte gib deinen Namen, deine Nachricht und mindestens einen Kontaktweg an."
+  },
+  "thankYou": {
+    "title": "Termin bestätigt ✅",
+    "description": "Wir senden dir in Kürze eine Bestätigung.",
+    "cta": "Zur Startseite"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "cta": "Startseite"
+  },
+  "timeslot": {
+    "empty": "Keine Zeiten verfügbar."
+  },
+  "language": {
+    "en": "Englisch",
+    "de": "Deutsch"
+  },
+  "weekdays": [
+    "Sonntag",
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag",
+    "Freitag",
+    "Samstag"
+  ],
+  "alerts": {
+    "contactInvalid": "Bitte gib Name, Nachricht und einen Kontaktweg an."
+  }
+}

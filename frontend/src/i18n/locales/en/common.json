@@ -1,0 +1,202 @@
+{
+  "brand": "Meister Barbershop",
+  "nav": {
+    "home": "Home",
+    "booking": "Booking",
+    "contact": "Contact"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "languages": {
+      "en": "English",
+      "de": "Deutsch"
+    }
+  },
+  "footer": {
+    "address": "Germany, Erlangen, Hauptstr. 12 — Meister Barbershop",
+    "open": "Open Mon–Sat"
+  },
+  "home": {
+    "badge": "Meister • Bronze Line",
+    "title": "Book your next cut online",
+    "subtitle": "Monday through Saturday, 45-minute slots.",
+    "bookCta": "Book an appointment",
+    "locationCta": "View location",
+    "features": {
+      "quality": {
+        "title": "Quality",
+        "description": "Premium grooming in a relaxed atmosphere."
+      },
+      "speed": {
+        "title": "Speed",
+        "description": "Right on time without rushing the craft."
+      },
+      "hygiene": {
+        "title": "Hygiene",
+        "description": "Clean tools and fresh towels for every guest."
+      }
+    },
+    "locationTitle": "Location",
+    "locationDetail": "Germany, Erlangen, Hauptstr. 12 — Meister Barbershop",
+    "directionsCta": "Get directions",
+    "studentOffer": {
+      "title": "🎓 Student Tuesday Offer",
+      "subtitle": "Haircuts only 15€ every Tuesday.",
+      "note": "Don’t forget to bring your student card!"
+    },
+    "reviews": {
+      "title": "What clients say on Google",
+      "cta": "View all on Google",
+      "ratingLabel": "{{rating}} out of 5",
+      "totalLabel": "{{count, number}} Google reviews",
+      "readMore": "Read more on Google",
+      "error": "We could not load Google reviews right now.",
+      "empty": "Reviews will appear here once available.",
+      "prev": "Previous reviews",
+      "next": "Next reviews"
+    }
+  },
+  "booking": {
+    "title": "Book an appointment",
+    "step": "Step {{current}} of {{total}}",
+    "selectDateLabel": "Date (Mon–Sat)",
+    "weekdayLabel": "({{weekday}})",
+    "closedSunday": "We are closed on Sunday.",
+    "barberUnavailable": "This barber is not available on the selected day.",
+    "availableSlots": "Available times",
+    "services": {
+      "label": "Select a service",
+      "helper": "Service length determines which times are available.",
+      "haircut": {
+        "title": "Haircut",
+        "duration": "40 minutes"
+      },
+      "hair_beard": {
+        "title": "Hair + Beard",
+        "duration": "60 minutes"
+      }
+    },
+    "customer": {
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone number",
+      "helper": "Name, email, and phone are required to confirm the booking."
+    },
+    "summary": {
+      "title": "Summary",
+      "barber": "Barber",
+      "date": "Date",
+      "time": "Time",
+      "service": "Service"
+    },
+    "final": {
+      "title": "Final confirmation",
+      "description": "Press confirm to save your appointment."
+    },
+    "buttons": {
+      "previous": "Back",
+      "next": "Next",
+      "review": "Review",
+      "confirm": "Confirm booking",
+      "select": "Select",
+      "selected": "Selected"
+    },
+    "loading": "Booking…",
+    "errors": {
+      "loadBarbers": "Could not load barbers.",
+      "loadSlots": "Could not load slots.",
+      "missingFields": "Please complete name, email, and phone without extra spaces.",
+      "generic": "Something went wrong."
+    },
+    "barberCard": {
+      "description": "Personalised services (40–60 minutes)",
+      "altFallback": "Barber portrait"
+    },
+    "barbers": {
+      "book": "Book",
+      "bookLabel": "Book an appointment with {{name}}",
+      "availabilityLabel": "Availability",
+      "taglineLabel": "Specialty",
+      "details": {
+        "default": {
+          "tagline": "Expert grooming tailored to you",
+          "availability": "By appointment"
+        },
+        "ehsan": {
+          "tagline": "Precision fades & fine detail work",
+          "availability": "Mon–Sat"
+        },
+        "iman": {
+          "tagline": "Modern cuts and beard care",
+          "availability": "Mon–Sat"
+        },
+        "javad": {
+          "tagline": "Classic styles with a calm touch",
+          "availability": "Mon–Sat"
+        },
+        "ali": {
+          "tagline": "Creative looks & styling advice",
+          "availability": "Mon–Sat"
+        },
+        "reza": {
+          "tagline": "Weekend specialist for bold fades",
+          "availability": "Fri–Sat only"
+        }
+      }
+    },
+    "calendar": {
+      "past": "In the past",
+      "closed": "Closed",
+      "barberUnavailable": "Barber unavailable",
+      "fullyBooked": "Fully booked",
+      "loading": "Loading availability…",
+      "available": "{{count}} slot available",
+      "available_plural": "{{count}} slots available",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "loadingInline": "Loading availability…",
+      "error": "Could not load availability. Please try another date.",
+      "hint": "Select a day to see available times."
+    }
+  },
+  "contact": {
+    "title": "Contact us",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "submit": "Send",
+    "sending": "Sending…",
+    "success": "Thank you! We received your message.",
+    "error": "We could not send your message.",
+    "helper": "Please enter your name, message, and at least one contact method."
+  },
+  "thankYou": {
+    "title": "Your appointment is confirmed ✅",
+    "description": "We will send a confirmation shortly.",
+    "cta": "Back to home"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "cta": "Home"
+  },
+  "timeslot": {
+    "empty": "No times available."
+  },
+  "language": {
+    "en": "English",
+    "de": "Deutsch"
+  },
+  "weekdays": [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ],
+  "alerts": {
+    "contactInvalid": "Please fill name, message, and a contact method."
+  }
+}
