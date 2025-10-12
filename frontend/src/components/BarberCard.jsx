@@ -1,12 +1,10 @@
 import React, {
   useCallback,
   useEffect,
-  useId,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -23,34 +21,22 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
 
   const cardRef = useRef(null);
   const wrapperRef = useRef(null);
-  const sheetRef = useRef(null);
-  const bookButtonRef = useRef(null);
-  const dragStartRef = useRef(null);
   const frameRef = useRef(null);
-  const dragOffsetRef = useRef(0);
 
   const [isHovering, setIsHovering] = useState(false);
-  const [focusInside, setFocusInside] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
   const [isTouchMode, setIsTouchMode] = useState(() => {
     if (typeof window === "undefined" || !window.matchMedia) return false;
     try {
       return (
         window.matchMedia("(hover: none)").matches ||
-        window.matchMedia("(pointer: coarse)").matches
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.innerWidth <= 900
       );
     } catch (_err) {
       return false;
     }
   });
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalActive, setModalActive] = useState(false);
-
-  const headingId = useId();
-  const availabilityId = useId();
-  const popoverHeadingId = useId();
-  const modalHeadingId = useId();
 
   const displayName = barber?.displayName || barber?.name || "";
   const primaryInitial =
@@ -67,10 +53,6 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
     setLoaded(false);
     setErrored(false);
   }, [photo]);
-
-  const details = useMemo(() => getBarberDetails(displayName), [displayName]);
-  const tagline = t(details.taglineKey);
-  const availability = t(details.availabilityKey);
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return undefined;
@@ -92,10 +74,23 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
     };
   }, []);
 
-  const showPopover = !isTouchMode && (isHovering || focusInside);
-  const liveAnnouncement = showPopover
-    ? `${displayName}. ${availability}. ${tagline}`
-    : "";
+  const details = useMemo(() => getBarberDetails(displayName), [displayName]);
+  const tagline = t(details.taglineKey);
+  const availability = t(details.availabilityKey);
+  const defaultDescription = t("booking.barberCard.description");
+
+  const infoId = useMemo(() => {
+    if (typeof barber?.id !== "undefined" && barber?.id !== null) {
+      return `barber-${barber.id}`;
+    }
+    const base = (displayName || "barber")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    return `barber-${base || "card"}`;
+  }, [barber?.id, displayName]);
+
+  const showSkeleton = photo && !errored && !loaded;
 
   const resetTilt = useCallback(() => {
     if (!cardRef.current) return;
@@ -138,67 +133,6 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
     []
   );
 
-  useEffect(() => {
-    dragOffsetRef.current = dragOffset;
-  }, [dragOffset]);
-
-  const openModal = useCallback(() => {
-    if (!isTouchMode) return;
-    setModalVisible(true);
-    requestAnimationFrame(() => setModalActive(true));
-  }, [isTouchMode]);
-
-  const closeModal = useCallback(() => {
-    setModalActive(false);
-    setDragOffset(0);
-    dragStartRef.current = null;
-    setIsDragging(false);
-  }, []);
-
-  useEffect(() => {
-    if (!modalVisible) return undefined;
-    if (!modalActive) {
-      const timeout = setTimeout(() => {
-        setModalVisible(false);
-      }, 300);
-      return () => clearTimeout(timeout);
-    }
-    return undefined;
-  }, [modalActive, modalVisible]);
-
-  useEffect(() => {
-    if (!modalVisible || !modalActive) return undefined;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [modalActive, modalVisible]);
-
-  useEffect(() => {
-    if (!modalActive || !bookButtonRef.current) return undefined;
-    const id = requestAnimationFrame(() => {
-      bookButtonRef.current?.focus({ preventScroll: true });
-    });
-    return () => cancelAnimationFrame(id);
-  }, [modalActive]);
-
-  useEffect(() => {
-    if (!showPopover && !modalActive) return undefined;
-    const onKeyDown = (event) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        if (modalActive) {
-          closeModal();
-        }
-        setIsHovering(false);
-        setFocusInside(false);
-      }
-    };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [closeModal, modalActive, showPopover]);
-
   const handleSelect = useCallback(() => {
     if (typeof onSelect === "function") {
       onSelect();
@@ -214,45 +148,25 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
     } else {
       navigate("/booking");
     }
-    setIsHovering(false);
-    setFocusInside(false);
-    if (modalActive) {
-      closeModal();
-    }
-  }, [barber?.id, closeModal, handleSelect, modalActive, navigate, onBook]);
-
-  const handleCardClick = useCallback(() => {
-    handleSelect();
-    if (isTouchMode) {
-      openModal();
-    }
-  }, [handleSelect, isTouchMode, openModal]);
+  }, [barber?.id, handleSelect, navigate, onBook]);
 
   const handleKeyDown = useCallback(
     (event) => {
-      if (event.key === " " || event.key === "Spacebar") {
+      if (event.key === " " || event.key === "Spacebar" || event.key === "Enter") {
         event.preventDefault();
         handleSelect();
-      }
-      if (event.key === "Enter") {
-        event.preventDefault();
-        if (isTouchMode) {
-          openModal();
-        } else {
-          setFocusInside(true);
-        }
       }
       if (event.key === "Escape") {
         event.preventDefault();
         setIsHovering(false);
-        setFocusInside(false);
+        setIsFocused(false);
       }
     },
-    [handleSelect, isTouchMode, openModal]
+    [handleSelect]
   );
 
   const handleFocus = useCallback(() => {
-    setFocusInside(true);
+    setIsFocused(true);
   }, []);
 
   const handleBlur = useCallback((event) => {
@@ -263,66 +177,11 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
     ) {
       return;
     }
-    setFocusInside(false);
+    setIsFocused(false);
   }, []);
 
-  const handlePointerDown = useCallback(
-    (event) => {
-      if (!isTouchMode) return;
-      if (event.pointerType === "mouse") return;
-      dragStartRef.current = event.clientY;
-      setIsDragging(true);
-      sheetRef.current?.setPointerCapture?.(event.pointerId);
-    },
-    [isTouchMode]
-  );
-
-  const handlePointerMove = useCallback((event) => {
-    if (dragStartRef.current === null) return;
-    const delta = Math.max(0, event.clientY - dragStartRef.current);
-    setDragOffset(delta);
-  }, []);
-
-  const handlePointerEnd = useCallback(
-    (event) => {
-      if (dragStartRef.current === null) return;
-      const shouldClose = dragOffsetRef.current > 90;
-      dragStartRef.current = null;
-      setIsDragging(false);
-      sheetRef.current?.releasePointerCapture?.(event.pointerId);
-      if (shouldClose) {
-        closeModal();
-      } else {
-        setDragOffset(0);
-      }
-    },
-    [closeModal]
-  );
-
-  const handleOverlayClick = useCallback(
-    (event) => {
-      if (event.target === event.currentTarget) {
-        closeModal();
-      }
-    },
-    [closeModal]
-  );
-
-  const showInitial = !photo || errored;
-  const showSkeleton = photo && !errored && !loaded;
-  const cardClasses = ["card", "barber-card"];
-  if (showPopover) cardClasses.push("is-active");
-  if (selected) cardClasses.push("is-selected");
-
-  const sheetClasses = ["barber-sheet"];
-  if (modalActive) sheetClasses.push("is-open");
-  if (isDragging) sheetClasses.push("dragging");
-
-  const overlayClasses = ["barber-sheet-overlay"];
-  if (modalActive) overlayClasses.push("is-open");
-
-  const sheetStyle =
-    modalActive || isDragging ? { transform: `translateY(${dragOffset}px)` } : undefined;
+  const showDetails = isTouchMode || isHovering || isFocused || selected;
+  const bookTabIndex = showDetails ? 0 : -1;
 
   return (
     <div
@@ -341,20 +200,17 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
         }
       }}
     >
-      <div className="sr-only" aria-live="polite" aria-atomic="true">
-        {liveAnnouncement}
-      </div>
       <div
         ref={cardRef}
         role="button"
         tabIndex={0}
         aria-pressed={selected}
-        aria-haspopup={isTouchMode ? "dialog" : "true"}
-        aria-expanded={isTouchMode ? modalActive : showPopover}
-        aria-labelledby={headingId}
-        aria-describedby={availabilityId}
-        className={cardClasses.join(" ")}
-        onClick={handleCardClick}
+        aria-labelledby={`${infoId}-title`}
+        aria-describedby={`${infoId}-details`}
+        className={`card barber-card${showDetails ? " is-active" : ""}${
+          selected ? " is-selected" : ""
+        }`}
+        onClick={handleSelect}
         onKeyDown={handleKeyDown}
       >
         <div className="barber-card__content">
@@ -373,130 +229,42 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
                 }}
               />
             )}
-            {showInitial && <span className="avatar-initial">{initials}</span>}
+            {(!photo || errored) && <span className="avatar-initial">{initials}</span>}
           </div>
           <div className="barber-card__meta">
-            <span id={headingId} className="barber-card__name">
+            <span id={`${infoId}-title`} className="barber-card__name">
               {displayName}
             </span>
-            <span id={availabilityId} className="barber-card__availability">
-              {availability}
-            </span>
-            <span className="barber-card__tagline">{tagline}</span>
+            <span className="barber-card__description">{defaultDescription}</span>
           </div>
+        </div>
+
+        <div
+          id={`${infoId}-details`}
+          className={`barber-card__info${showDetails ? " is-visible" : ""}`}
+          aria-hidden={!showDetails && !isTouchMode}
+        >
+          <div className="barber-card__info-text">
+            <span className="barber-card__info-availability">{availability}</span>
+            <span className="barber-card__info-divider" aria-hidden="true">
+              •
+            </span>
+            <span className="barber-card__info-tagline">{tagline}</span>
+          </div>
+          <button
+            type="button"
+            className="btn barber-card__book"
+            onClick={(event) => {
+              event.stopPropagation();
+              handleBook();
+            }}
+            tabIndex={bookTabIndex}
+            aria-label={t("booking.barbers.bookLabel", { name: displayName })}
+          >
+            {t("booking.barbers.book")}
+          </button>
         </div>
       </div>
-
-      {!isTouchMode && (
-        <div
-          className={`barber-popover${showPopover ? " is-visible" : ""}`}
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby={popoverHeadingId}
-          tabIndex={-1}
-        >
-          <div className="barber-popover__header">
-            <div className="barber-popover__thumb">
-              {photo && !errored ? (
-                <img src={photo} alt="" aria-hidden="true" />
-              ) : (
-                <span className="avatar-initial">{initials}</span>
-              )}
-            </div>
-            <div>
-              <div id={popoverHeadingId} className="barber-popover__name">
-                {displayName}
-              </div>
-              <div className="barber-popover__body" style={{ margin: 0 }}>
-                <span>
-                  <strong>{t("booking.barbers.availabilityLabel")}:</strong> {availability}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="barber-popover__body">
-            <span>
-              <strong>{t("booking.barbers.taglineLabel")}:</strong> {tagline}
-            </span>
-          </div>
-          <div className="barber-popover__actions">
-            <button
-              type="button"
-              className="btn barber-card__button"
-              onClick={handleBook}
-              aria-label={t("booking.barbers.bookLabel", { name: displayName })}
-            >
-              {t("booking.barbers.book")}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {modalVisible &&
-        createPortal(
-          <div
-            className={overlayClasses.join(" ")}
-            role="presentation"
-            onClick={handleOverlayClick}
-          >
-            <div
-              ref={sheetRef}
-              className={sheetClasses.join(" ")}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={modalHeadingId}
-              aria-live="polite"
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerEnd}
-              onPointerCancel={handlePointerEnd}
-              style={sheetStyle}
-            >
-              <div className="barber-sheet__handle" aria-hidden="true" />
-              <div className="barber-sheet__header">
-                <div className="barber-sheet__thumb">
-                  {photo && !errored ? (
-                    <img src={photo} alt="" aria-hidden="true" />
-                  ) : (
-                    <span className="avatar-initial">{initials}</span>
-                  )}
-                </div>
-                <div>
-                  <div id={modalHeadingId} className="barber-sheet__name">
-                    {displayName}
-                  </div>
-                  <div className="barber-sheet__details">
-                    <span>
-                      <strong>{t("booking.barbers.availabilityLabel")}:</strong> {availability}
-                    </span>
-                    <span>
-                      <strong>{t("booking.barbers.taglineLabel")}:</strong> {tagline}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="barber-sheet__actions">
-                <button
-                  ref={bookButtonRef}
-                  type="button"
-                  className="btn"
-                  onClick={handleBook}
-                  aria-label={t("booking.barbers.bookLabel", { name: displayName })}
-                >
-                  {t("booking.barbers.book")}
-                </button>
-                <button
-                  type="button"
-                  className="barber-sheet__close"
-                  onClick={closeModal}
-                >
-                  {t("booking.buttons.previous")}
-                </button>
-              </div>
-            </div>
-          </div>,
-          document.body
-        )}
     </div>
   );
 }
