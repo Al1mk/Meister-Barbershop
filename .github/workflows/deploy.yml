@@ -37,9 +37,18 @@ jobs:
       - name: Deploy to Hetzner host
         env:
           REPO_URL: https://github.com/${{ github.repository }}.git
+          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DEBUG_VALUE: ${{ secrets.DJANGO_DEBUG }}
+          ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
+          TIME_ZONE: ${{ secrets.DJANGO_TIME_ZONE }}
+          ALLOWED_ORIGINS: ${{ secrets.DJANGO_ALLOWED_ORIGINS }}
+          CSRF_TRUSTED_ORIGINS: ${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
         run: |
           set -euo pipefail
-          sshpass -p "${SSH_PASS}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "REPO_URL='${REPO_URL}' bash -s" <<'SSH'
+          sshpass -p "${SSH_PASS}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "REPO_URL='${REPO_URL}' SECRET_KEY='${SECRET_KEY}' DEBUG_VALUE='${DEBUG_VALUE}' ALLOWED_HOSTS='${ALLOWED_HOSTS}' TIME_ZONE='${TIME_ZONE}' ALLOWED_ORIGINS='${ALLOWED_ORIGINS}' CSRF_TRUSTED_ORIGINS='${CSRF_TRUSTED_ORIGINS}' GOOGLE_PLACES_API_KEY='${GOOGLE_PLACES_API_KEY}' GOOGLE_PLACE_ID='${GOOGLE_PLACE_ID}' bash -s" <<'SSH'
             set -euo pipefail
             REPO_DIR="/root/Meister-Barbershop"
             if [ ! -d "${REPO_DIR}/.git" ]; then
@@ -48,6 +57,21 @@ jobs:
             fi
             cd "${REPO_DIR}"
             export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+            if [ -z "${SECRET_KEY:-}" ]; then
+              echo "Missing DJANGO_SECRET_KEY secret. Set secrets.DJANGO_SECRET_KEY in repository settings." >&2
+              exit 1
+            fi
+            cat <<EOF > backend/.env
+SECRET_KEY=${SECRET_KEY}
+DJANGO_SECRET_KEY=${SECRET_KEY}
+DEBUG=${DEBUG_VALUE:-False}
+ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
+TIME_ZONE=${TIME_ZONE:-Europe/Berlin}
+ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:5173}
+CSRF_TRUSTED_ORIGINS=${CSRF_TRUSTED_ORIGINS:-http://localhost}
+GOOGLE_PLACES_API_KEY=${GOOGLE_PLACES_API_KEY:-}
+GOOGLE_PLACE_ID=${GOOGLE_PLACE_ID:-}
+EOF
             if ! command -v docker >/dev/null 2>&1; then
               echo "Docker not found. Installing Docker CE..." >&2
               apt-get update
