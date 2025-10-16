@@ -1,8 +1,9 @@
 name: Deploy to Hetzner
+
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  workflow_dispatch:
 
 concurrency:
   group: deployment-main
@@ -88,7 +89,8 @@ EOF
             DOCKER_BIN="$(command -v docker)"
             if [ -x /usr/bin/docker-compose ]; then
               COMPOSE_CMD="/usr/bin/docker-compose"
-            elif ${DOCKER_BIN} compose version >/dev/null 2>&1; then
+            elif ${DOCKER_BIN} compose version >/dev/null 21
+            then
               COMPOSE_CMD="${DOCKER_BIN} compose"
             elif command -v docker-compose >/dev/null 2>&1; then
               COMPOSE_CMD="$(command -v docker-compose)"
@@ -121,3 +123,4 @@ EOF
             fi
             echo "Application responded with HTTP ${STATUS}"
           SSH
+
