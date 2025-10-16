@@ -28,7 +28,6 @@ jobs:
       DEBUG_VALUE: ${{ secrets.DJANGO_DEBUG }}
       ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
       TIME_ZONE: ${{ secrets.DJANGO_TIME_ZONE }}
-      ALLOWED_ORIGINS: ${{ secrets.DJANGO_ALLOWED_ORIGINS }}
       CSRF_TRUSTED_ORIGINS: ${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}
       GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
       GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
@@ -41,7 +40,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          required=(SECRET_KEY DEBUG_VALUE ALLOWED_HOSTS TIME_ZONE ALLOWED_ORIGINS CSRF_TRUSTED_ORIGINS SSH_HOST SSH_USER SSH_PASS SSH_PORT)
+          required=(SECRET_KEY DEBUG_VALUE ALLOWED_HOSTS TIME_ZONE CSRF_TRUSTED_ORIGINS SSH_HOST SSH_USER SSH_PASS SSH_PORT)
           missing=()
           for k in "${required[@]}"; do
             if [ -z "${!k:-}" ]; then
@@ -83,5 +82,5 @@ jobs:
           set -euo pipefail
           sshpass -p "${SSH_PASS}" ssh -p "${SSH_PORT}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
             "${SSH_USER}@${SSH_HOST}" \
-            "REPO_URL='${REPO_URL}' SECRET_KEY='${SECRET_KEY}' DEBUG_VALUE='${DEBUG_VALUE}' ALLOWED_HOSTS='${ALLOWED_HOSTS}' TIME_ZONE='${TIME_ZONE}' ALLOWED_ORIGINS='${ALLOWED_ORIGINS}' CSRF_TRUSTED_ORIGINS='${CSRF_TRUSTED_ORIGINS}' GOOGLE_PLACES_API_KEY='${GOOGLE_PLACES_API_KEY}' GOOGLE_PLACE_ID='${GOOGLE_PLACE_ID}' bash /tmp/remote.sh"
+            "REPO_URL='${REPO_URL}' SECRET_KEY='${SECRET_KEY}' DEBUG_VALUE='${DEBUG_VALUE}' ALLOWED_HOSTS='${ALLOWED_HOSTS}' TIME_ZONE='${TIME_ZONE}' CSRF_TRUSTED_ORIGINS='${CSRF_TRUSTED_ORIGINS}' GOOGLE_PLACES_API_KEY='${GOOGLE_PLACES_API_KEY}' GOOGLE_PLACE_ID='${GOOGLE_PLACE_ID}' bash /tmp/remote.sh"
 
