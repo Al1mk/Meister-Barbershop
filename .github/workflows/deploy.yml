@@ -27,7 +27,7 @@ jobs:
 
       - name: Build Docker images (verification)
         run: |
-          docker compose build --progress=plain
+          docker compose --progress plain build
 
       - name: Install sshpass
         run: |
@@ -37,7 +37,7 @@ jobs:
       - name: Deploy to Hetzner host
         run: |
           set -euo pipefail
-          sshpass -p "${SSH_PASS}" ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" '
+          sshpass -p "${SSH_PASS}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" '
             set -euo pipefail
             cd /root/Meister-Barbershop
             git pull origin main

@@ -18,7 +18,8 @@ FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     DJANGO_SETTINGS_MODULE=config.settings \
-    DJANGO_SECRET_KEY=unsafe-placeholder-key
+    DJANGO_SECRET_KEY=unsafe-placeholder-key \
+    SECRET_KEY=unsafe-placeholder-key
 WORKDIR /app
 
 RUN apt-get update \
