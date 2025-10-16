@@ -48,21 +48,39 @@ jobs:
             fi
             cd "${REPO_DIR}"
             export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
-            if command -v docker >/dev/null 2>&1; then
-              DOCKER_BIN="docker"
-            elif [ -x /usr/bin/docker ]; then
-              DOCKER_BIN="/usr/bin/docker"
-            else
-              echo "Docker binary not found in PATH."
-              exit 127
+            if ! command -v docker >/dev/null 2>&1; then
+              echo "Docker not found. Installing Docker CE..." >&2
+              apt-get update
+              apt-get install -y ca-certificates curl gnupg lsb-release
+              install -m 0755 -d /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/$(. /etc/os-release && echo "$ID")/gpg -o /etc/apt/keyrings/docker.asc
+              chmod a+r /etc/apt/keyrings/docker.asc
+              echo \
+                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/$(. /etc/os-release && echo "$ID") \
+                $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+              apt-get update
+              apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+              systemctl enable --now docker
             fi
-            if ${DOCKER_BIN} compose version >/dev/null 2>&1; then
+            DOCKER_BIN="$(command -v docker)"
+            if [ -x /usr/bin/docker-compose ]; then
+              COMPOSE_CMD="/usr/bin/docker-compose"
+            elif ${DOCKER_BIN} compose version >/dev/null 2>&1; then
               COMPOSE_CMD="${DOCKER_BIN} compose"
             elif command -v docker-compose >/dev/null 2>&1; then
-              COMPOSE_CMD="docker-compose"
+              COMPOSE_CMD="$(command -v docker-compose)"
             else
-              echo "Docker Compose is not available."
-              exit 127
+              echo "Docker Compose is not available. Attempting to install plugin..." >&2
+              apt-get update
+              apt-get install -y docker-compose-plugin
+              if ${DOCKER_BIN} compose version >/dev/null 2>&1; then
+                COMPOSE_CMD="${DOCKER_BIN} compose"
+              elif command -v docker-compose >/dev/null 2>&1; then
+                COMPOSE_CMD="$(command -v docker-compose)"
+              else
+                echo "Docker Compose installation failed." >&2
+                exit 127
+              fi
             fi
             git fetch origin main
             git pull origin main
