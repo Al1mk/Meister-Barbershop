@@ -35,11 +35,19 @@ jobs:
           sudo apt-get install -y sshpass
 
       - name: Deploy to Hetzner host
+        env:
+          REPO_URL: https://github.com/${{ github.repository }}.git
         run: |
           set -euo pipefail
-          sshpass -p "${SSH_PASS}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" '
+          sshpass -p "${SSH_PASS}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" "REPO_URL='${REPO_URL}' bash -s" <<'SSH'
             set -euo pipefail
-            cd ~/Meister-Barbershop
+            REPO_DIR="/root/Meister-Barbershop"
+            if [ ! -d "${REPO_DIR}/.git" ]; then
+              mkdir -p "$(dirname "${REPO_DIR}")"
+              git clone "${REPO_URL}" "${REPO_DIR}"
+            fi
+            cd "${REPO_DIR}"
+            git fetch origin main
             git pull origin main
             docker compose down
             docker compose build --no-cache
@@ -54,4 +62,4 @@ jobs:
               exit 1
             fi
             echo "Application responded with HTTP ${STATUS}"
-          '
+          SSH
