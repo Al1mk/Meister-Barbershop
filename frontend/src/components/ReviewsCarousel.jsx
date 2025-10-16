@@ -8,7 +8,13 @@ const MAX_TEXT_LENGTH = 220;
 
 const formatRelativeTime = (timestamp, locale) => {
   if (!timestamp) return "";
-  const date = new Date(timestamp * 1000);
+  let date;
+  if (typeof timestamp === "number") {
+    date = new Date(timestamp * 1000);
+  } else {
+    date = new Date(timestamp);
+  }
+  if (Number.isNaN(date.getTime())) return "";
   const now = Date.now();
   const diff = now - date.getTime();
   const units = [
@@ -174,9 +180,9 @@ export default function ReviewsCarousel() {
                 {ratingFormatter.format(data.rating)}
                 <StarRating value={data.rating} label={t("home.reviews.ratingLabel", { rating: ratingFormatter.format(data.rating) })} />
               </span>
-              {typeof data.total_reviews === "number" && (
+              {typeof data.userRatingCount === "number" && (
                 <span className="reviews-count">
-                  {t("home.reviews.totalLabel", { count: data.total_reviews })}
+                  {t("home.reviews.totalLabel", { count: data.userRatingCount })}
                 </span>
               )}
             </div>
@@ -200,25 +206,16 @@ export default function ReviewsCarousel() {
           <div className={`reviews-track${prefersReducedMotion ? " reduced-motion" : ""}`} style={trackStyle} role="list">
             {reviews.map((review, idx) => {
               const truncated = truncateText(review.text);
-              const reviewLink = review.author_url || data?.place_url;
-              const relative = review.time ? formatRelativeTime(review.time, i18n.language) : (review.relative_time_description || "");
+              const reviewLink = review.sourceUrl;
+              const relative = review.time ? formatRelativeTime(review.time, i18n.language) : "";
               return (
-                <article className="review-card" role="listitem" key={`${review.author_name}-${idx}`}>
+                <article className="review-card" role="listitem" key={`${review.authorName || "review"}-${idx}`}>
                   <header className="review-card__header">
-                    <div className="review-card__avatar" aria-hidden="true">
-                      {review.profile_photo_url ? (
-                        <img src={review.profile_photo_url} alt="" />
-                      ) : (
-                        <span>{(review.author_name || "?").slice(0, 1).toUpperCase()}</span>
-                      )}
-                    </div>
-                    <div>
-                      <div className="review-card__name">{review.author_name || "Google User"}</div>
-                      <StarRating
-                        value={review.rating || 0}
-                        label={t("home.reviews.ratingLabel", { rating: ratingFormatter.format(review.rating || 0) })}
-                      />
-                    </div>
+                    <div className="review-card__name">{review.authorName || "Google User"}</div>
+                    <StarRating
+                      value={review.rating || 0}
+                      label={t("home.reviews.ratingLabel", { rating: ratingFormatter.format(review.rating || 0) })}
+                    />
                   </header>
                   <div className="review-card__body">
                     <p>{truncated}</p>
@@ -228,9 +225,11 @@ export default function ReviewsCarousel() {
                       </a>
                     )}
                   </div>
-                  <footer className="review-card__footer">
-                    <span>{relative}</span>
-                  </footer>
+                  {relative && (
+                    <footer className="review-card__footer">
+                      <span>{relative}</span>
+                    </footer>
+                  )}
                 </article>
               );
             })}
