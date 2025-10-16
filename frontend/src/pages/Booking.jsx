@@ -16,7 +16,7 @@ const NAME_MAP = {
 };
 
 const TIME_ZONE = "Europe/Berlin";
-const SERVICE_DURATION = { haircut: 40, hair_beard: 60 };
+const SERVICE_DURATION = { haircut: 30, hair_beard: 45 };
 const SERVICE_ORDER = ["haircut", "hair_beard"];
 const DEFAULT_SERVICE = "haircut";
 const REZA_MATCHES = new Set(["reza", "رضا"]);

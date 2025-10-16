@@ -28,8 +28,8 @@ SERVICE_CHOICES = (
 )
 
 SERVICE_DURATION_MAP = {
-    "haircut": 40,
-    "hair_beard": 60,
+    "haircut": 30,
+    "hair_beard": 45,
 }
 
 DEFAULT_DURATION_MINUTES = SERVICE_DURATION_MAP["haircut"]

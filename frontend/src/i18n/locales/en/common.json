@@ -109,7 +109,7 @@
       "generic": "Something went wrong."
     },
     "barberCard": {
-      "description": "Personalised services (40–60 minutes)",
+      "description": "Personalised services (30–45 minutes)",
       "altFallback": "Barber portrait"
     },
     "barbers": {

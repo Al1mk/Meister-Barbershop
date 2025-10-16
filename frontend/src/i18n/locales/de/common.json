@@ -69,11 +69,11 @@
       "helper": "Die Dauer bestimmt, welche Zeiten verfügbar sind.",
       "haircut": {
         "title": "Haarschnitt",
-        "duration": "40 Minuten"
+        "duration": "30 Minuten"
       },
       "hair_beard": {
         "title": "Haare & Bart",
-        "duration": "60 Minuten"
+        "duration": "45 Minuten"
       }
     },
     "customer": {
