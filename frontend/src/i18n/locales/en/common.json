@@ -69,11 +69,11 @@
       "helper": "Service length determines which times are available.",
       "haircut": {
         "title": "Haircut",
-        "duration": "40 minutes"
+        "duration": "30 minutes"
       },
       "hair_beard": {
         "title": "Hair + Beard",
-        "duration": "60 minutes"
+        "duration": "45 minutes"
       }
     },
     "customer": {
