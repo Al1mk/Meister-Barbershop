@@ -47,14 +47,31 @@ jobs:
               git clone "${REPO_URL}" "${REPO_DIR}"
             fi
             cd "${REPO_DIR}"
+            export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+            if command -v docker >/dev/null 2>&1; then
+              DOCKER_BIN="docker"
+            elif [ -x /usr/bin/docker ]; then
+              DOCKER_BIN="/usr/bin/docker"
+            else
+              echo "Docker binary not found in PATH."
+              exit 127
+            fi
+            if ${DOCKER_BIN} compose version >/dev/null 2>&1; then
+              COMPOSE_CMD="${DOCKER_BIN} compose"
+            elif command -v docker-compose >/dev/null 2>&1; then
+              COMPOSE_CMD="docker-compose"
+            else
+              echo "Docker Compose is not available."
+              exit 127
+            fi
             git fetch origin main
             git pull origin main
-            docker compose down
-            docker compose build --no-cache
-            docker compose up -d
+            ${COMPOSE_CMD} down
+            ${COMPOSE_CMD} build --no-cache
+            ${COMPOSE_CMD} up -d
             sleep 15
-            docker compose ps
-            docker ps
+            ${COMPOSE_CMD} ps
+            ${DOCKER_BIN} ps
             STATUS=$(curl -s -o /tmp/deploy_curl.log -w "%{http_code}" http://localhost || true)
             if [ "${STATUS}" -lt 200 ] || [ "${STATUS}" -ge 300 ]; then
               echo "Unexpected HTTP status: ${STATUS}"
