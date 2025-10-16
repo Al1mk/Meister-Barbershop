@@ -13,59 +13,90 @@ jobs:
   deploy:
     name: Build & Deploy
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     env:
+      # SSH connection (already in your repo secrets)
       SSH_HOST: ${{ secrets.SERVER_IP }}
       SSH_USER: ${{ secrets.SERVER_USER }}
       SSH_PASS: ${{ secrets.SERVER_PASS }}
       SSH_PORT: ${{ secrets.SERVER_PORT }}
+
+      # App/config secrets
+      REPO_URL: https://github.com/${{ github.repository }}.git
+      SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+      DEBUG_VALUE: ${{ secrets.DJANGO_DEBUG }}
+      ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
+      TIME_ZONE: ${{ secrets.DJANGO_TIME_ZONE }}
+      ALLOWED_ORIGINS: ${{ secrets.DJANGO_ALLOWED_ORIGINS }}
+      CSRF_TRUSTED_ORIGINS: ${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}
+      GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+      GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Validate required secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(SECRET_KEY DEBUG_VALUE ALLOWED_HOSTS TIME_ZONE ALLOWED_ORIGINS CSRF_TRUSTED_ORIGINS SSH_HOST SSH_USER SSH_PASS SSH_PORT)
+          missing=()
+          for k in "${required[@]}"; do
+            if [ -z "${!k:-}" ]; then
+              missing+=("$k")
+            fi
+          done
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "Missing required secrets/env: ${missing[*]}" >&2
+            exit 1
+          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker images (verification)
+        shell: bash
         run: |
+          set -euo pipefail
           docker compose --progress plain build
 
       - name: Install sshpass
+        shell: bash
         run: |
+          set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y sshpass
 
       - name: Deploy to Hetzner host
-        env:
-          REPO_URL: https://github.com/${{ github.repository }}.git
-          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          DEBUG_VALUE: ${{ secrets.DJANGO_DEBUG }}
-          ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
-          TIME_ZONE: ${{ secrets.DJANGO_TIME_ZONE }}
-          ALLOWED_ORIGINS: ${{ secrets.DJANGO_ALLOWED_ORIGINS }}
-          CSRF_TRUSTED_ORIGINS: ${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}
-          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
-          GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
+        shell: bash
         run: |
           set -euo pipefail
-          sshpass -p "${SSH_PASS}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+
+          sshpass -p "${SSH_PASS}" ssh \
+            -o StrictHostKeyChecking=no \
+            -o UserKnownHostsFile=/dev/null \
+            -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
             "REPO_URL='${REPO_URL}' SECRET_KEY='${SECRET_KEY}' DEBUG_VALUE='${DEBUG_VALUE}' ALLOWED_HOSTS='${ALLOWED_HOSTS}' TIME_ZONE='${TIME_ZONE}' ALLOWED_ORIGINS='${ALLOWED_ORIGINS}' CSRF_TRUSTED_ORIGINS='${CSRF_TRUSTED_ORIGINS}' GOOGLE_PLACES_API_KEY='${GOOGLE_PLACES_API_KEY}' GOOGLE_PLACE_ID='${GOOGLE_PLACE_ID}' bash -s" <<'SSH'
-            set -euo pipefail
-            REPO_DIR="/root/Meister-Barbershop"
+          set -euo pipefail
 
-            if [ ! -d "${REPO_DIR}/.git" ]; then
-              mkdir -p "$(dirname "${REPO_DIR}")"
-              git clone "${REPO_URL}" "${REPO_DIR}"
-            fi
+          REPO_DIR="/root/Meister-Barbershop"
 
-            cd "${REPO_DIR}"
-            export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+          if [ ! -d "${REPO_DIR}/.git" ]; then
+            mkdir -p "$(dirname "${REPO_DIR}")"
+            git clone "${REPO_URL}" "${REPO_DIR}"
+          fi
 
-            if [ -z "${SECRET_KEY:-}" ]; then
-              echo "Missing DJANGO_SECRET_KEY secret. Set secrets.DJANGO_SECRET_KEY in repository settings." >&2
-              exit 1
-            fi
+          cd "${REPO_DIR}"
+          export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 
-            cat <<EOF > backend/.env
+          if [ -z "${SECRET_KEY:-}" ]; then
+            echo "Missing DJANGO_SECRET_KEY secret. Set secrets.DJANGO_SECRET_KEY in repository settings." >&2
+            exit 1
+          fi
+
+          cat <<EOF > backend/.env
 SECRET_KEY=${SECRET_KEY}
 DJANGO_SECRET_KEY=${SECRET_KEY}
 DEBUG=${DEBUG_VALUE:-False}
@@ -77,59 +108,60 @@ GOOGLE_PLACES_API_KEY=${GOOGLE_PLACES_API_KEY:-}
 GOOGLE_PLACE_ID=${GOOGLE_PLACE_ID:-}
 EOF
 
-            if ! command -v docker >/dev/null 2>&1; then
-              echo "Docker not found. Installing Docker CE..." >&2
-              apt-get update
-              apt-get install -y ca-certificates curl gnupg lsb-release
-              install -m 0755 -d /etc/apt/keyrings
-              curl -fsSL https://download.docker.com/linux/$(. /etc/os-release && echo "$ID")/gpg -o /etc/apt/keyrings/docker.asc
-              chmod a+r /etc/apt/keyrings/docker.asc
-              echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/$(. /etc/os-release && echo "$ID") $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
-              apt-get update
-              apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-              systemctl enable --now docker
-            fi
+          if ! command -v docker >/dev/null 2>&1; then
+            echo "Docker not found. Installing Docker CE..." >&2
+            apt-get update
+            apt-get install -y ca-certificates curl gnupg lsb-release
+            install -m 0755 -d /etc/apt/keyrings
+            curl -fsSL "https://download.docker.com/linux/$(. /etc/os-release && echo "$ID")/gpg" -o /etc/apt/keyrings/docker.asc
+            chmod a+r /etc/apt/keyrings/docker.asc
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/$(. /etc/os-release && echo "$ID") $(lsb_release -cs) stable" \
+              | tee /etc/apt/sources.list.d/docker.list > /dev/null
+            apt-get update
+            apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            systemctl enable --now docker
+          fi
 
-            DOCKER_BIN="$(command -v docker)"
+          DOCKER_BIN="$(command -v docker)"
 
-            if [ -x /usr/bin/docker-compose ]; then
-              COMPOSE_CMD="/usr/bin/docker-compose"
-            elif ${DOCKER_BIN} compose version >/dev/null 2>&1; then
+          if [ -x /usr/bin/docker-compose ]; then
+            COMPOSE_CMD="/usr/bin/docker-compose"
+          elif ${DOCKER_BIN} compose version >/dev/null 2>&1; then
+            COMPOSE_CMD="${DOCKER_BIN} compose"
+          elif command -v docker-compose >/dev/null 2>&1; then
+            COMPOSE_CMD="$(command -v docker-compose)"
+          else
+            echo "Docker Compose is not available. Attempting to install plugin..." >&2
+            apt-get update
+            apt-get install -y docker-compose-plugin
+            if ${DOCKER_BIN} compose version >/dev/null 2>&1; then
               COMPOSE_CMD="${DOCKER_BIN} compose"
             elif command -v docker-compose >/dev/null 2>&1; then
               COMPOSE_CMD="$(command -v docker-compose)"
             else
-              echo "Docker Compose is not available. Attempting to install plugin..." >&2
-              apt-get update
-              apt-get install -y docker-compose-plugin
-              if ${DOCKER_BIN} compose version >/dev/null 2>&1; then
-                COMPOSE_CMD="${DOCKER_BIN} compose"
-              elif command -v docker-compose >/dev/null 2>&1; then
-                COMPOSE_CMD="$(command -v docker-compose)"
-              else
-                echo "Docker Compose installation failed." >&2
-                exit 127
-              fi
+              echo "Docker Compose installation failed." >&2
+              exit 127
             fi
+          fi
 
-            git fetch origin main
-            git pull origin main
+          git fetch origin main
+          git pull origin main
 
-            ${COMPOSE_CMD} down
-            ${COMPOSE_CMD} build --no-cache
-            ${COMPOSE_CMD} up -d
+          ${COMPOSE_CMD} down
+          ${COMPOSE_CMD} build --no-cache
+          ${COMPOSE_CMD} up -d
 
-            sleep 15
-            ${COMPOSE_CMD} ps
-            ${DOCKER_BIN} ps
+          sleep 15
+          ${COMPOSE_CMD} ps
+          ${DOCKER_BIN} ps
 
-            STATUS=$(curl -s -o /tmp/deploy_curl.log -w "%{http_code}" http://localhost || true)
-            if [ "${STATUS}" -lt 200 ] || [ "${STATUS}" -ge 300 ]; then
-              echo "Unexpected HTTP status: ${STATUS}"
-              cat /tmp/deploy_curl.log || true
-              exit 1
-            fi
+          STATUS=$(curl -s -o /tmp/deploy_curl.log -w "%{http_code}" http://localhost || true)
+          if [ "${STATUS}" -lt 200 ] || [ "${STATUS}" -ge 300 ]; then
+            echo "Unexpected HTTP status: ${STATUS}"
+            cat /tmp/deploy_curl.log || true
+            exit 1
+          fi
 
-            echo "Application responded with HTTP ${STATUS}"
+          echo "Application responded with HTTP ${STATUS}"
 SSH
 
