@@ -39,7 +39,7 @@ jobs:
           set -euo pipefail
           sshpass -p "${SSH_PASS}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" '
             set -euo pipefail
-            cd /root/Meister-Barbershop
+            cd ~/Meister-Barbershop
             git pull origin main
             docker compose down
             docker compose build --no-cache
