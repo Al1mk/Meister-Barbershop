@@ -2,7 +2,8 @@ name: Deploy to Hetzner
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency:
@@ -11,76 +12,32 @@ concurrency:
 
 jobs:
   deploy:
-    name: Build & Deploy
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    # environment: production   # uncomment if you use Environment-scoped secrets
     env:
-      # SSH
       SSH_HOST: ${{ secrets.SERVER_IP }}
       SSH_USER: ${{ secrets.SERVER_USER }}
       SSH_PASS: ${{ secrets.SERVER_PASS }}
       SSH_PORT: ${{ secrets.SERVER_PORT }}
-      # App/config
       REPO_URL: https://github.com/${{ github.repository }}.git
-      SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-      DEBUG_VALUE: ${{ secrets.DJANGO_DEBUG }}
-      ALLOWED_HOSTS: ${{ secrets.DJANGO_ALLOWED_HOSTS }}
-      TIME_ZONE: ${{ secrets.DJANGO_TIME_ZONE }}
-      CSRF_TRUSTED_ORIGINS: ${{ secrets.DJANGO_CSRF_TRUSTED_ORIGINS }}
-      GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
-      GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate required secrets
-        shell: bash
-        run: |
-          set -euo pipefail
-          required=(SECRET_KEY DEBUG_VALUE ALLOWED_HOSTS TIME_ZONE CSRF_TRUSTED_ORIGINS SSH_HOST SSH_USER SSH_PASS SSH_PORT)
-          missing=()
-          for k in "${required[@]}"; do
-            if [ -z "${!k:-}" ]; then
-              missing+=("$k")
-            fi
-          done
-          if [ "${#missing[@]}" -gt 0 ]; then
-            echo "Missing required secrets/env: ${missing[*]}" >&2
-            exit 1
-          fi
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker images (verification)
-        shell: bash
-        run: |
-          set -euo pipefail
-          docker compose --progress plain build
-
       - name: Install sshpass
-        shell: bash
         run: |
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y sshpass
 
-      - name: Copy remote script
-        shell: bash
+      - name: Copy remote deploy script
         run: |
           set -euo pipefail
-          # Create a temp copy with correct permissions
           install -m 0755 deploy/remote.sh /tmp/remote.sh
           sshpass -p "${SSH_PASS}" scp -P "${SSH_PORT}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /tmp/remote.sh "${SSH_USER}@${SSH_HOST}:/tmp/remote.sh"
 
       - name: Execute remote deploy
-        shell: bash
         run: |
           set -euo pipefail
           sshpass -p "${SSH_PASS}" ssh -p "${SSH_PORT}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
             "${SSH_USER}@${SSH_HOST}" \
-            "REPO_URL='${REPO_URL}' SECRET_KEY='${SECRET_KEY}' DEBUG_VALUE='${DEBUG_VALUE}' ALLOWED_HOSTS='${ALLOWED_HOSTS}' TIME_ZONE='${TIME_ZONE}' CSRF_TRUSTED_ORIGINS='${CSRF_TRUSTED_ORIGINS}' GOOGLE_PLACES_API_KEY='${GOOGLE_PLACES_API_KEY}' GOOGLE_PLACE_ID='${GOOGLE_PLACE_ID}' bash /tmp/remote.sh"
-
+            "APP_DIR='/srv/meister' REPO_URL='${REPO_URL}' bash /tmp/remote.sh"
