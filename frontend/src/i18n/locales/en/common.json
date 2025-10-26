@@ -14,7 +14,17 @@
   },
   "footer": {
     "address": "Germany, Erlangen, Hauptstr. 12 — Meister Barbershop",
-    "open": "Open Mon–Sat"
+    "open": "Open Mon–Sat",
+    "contact": {
+      "title": "Contact / Kontakt",
+      "name": "Name",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Thanks, we'll get back to you.",
+      "error": "Something went wrong, please try again."
+    }
   },
   "home": {
     "badge": "Meister • Bronze Line",
@@ -42,7 +52,7 @@
     "studentOffer": {
       "title": "🎓 Student Tuesday Offer",
       "subtitle": "Haircuts only 15€ every Tuesday.",
-      "note": "Don’t forget to bring your student card!"
+      "note": "Don't forget to bring your student card!"
     },
     "reviews": {
       "title": "What clients say on Google",

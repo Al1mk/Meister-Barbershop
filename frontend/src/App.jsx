@@ -12,6 +12,7 @@ import Booking from "./pages/Booking.jsx";
 import Contact from "./pages/Contact.jsx";
 import ThankYou from "./pages/ThankYou.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import AdminSchedule from "./pages/AdminSchedule.jsx";
 
 const languages = [
   { code: "en", flag: flagUs, alt: "English (United States)" },
@@ -157,19 +158,62 @@ const LanguageSwitcher = () => {
 
 const Nav = () => {
   const { t } = useTranslation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <header className="navbar">
-      <div className="nav-left">
-        <LanguageSwitcher />
+      <div className="nav-brand-row">
         <div className="brand">
           <img src={logo} alt={t("brand") || "Meister Barbershop"} className="logo-img" width={40} height={40} />
           <h1 className="title">{t("brand")}</h1>
         </div>
+        <div className="nav-right-mobile">
+          <LanguageSwitcher />
+          <button 
+            className="hamburger" 
+            onClick={toggleMobileMenu}
+            aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
+        </div>
       </div>
-      <nav className="nav-links">
-        <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>{t("nav.home")}</NavLink>
-        <NavLink to="/booking" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>{t("nav.booking")}</NavLink>
-        <NavLink to="/contact" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>{t("nav.contact")}</NavLink>
+      <nav className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+        <NavLink 
+          to="/" 
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+          onClick={closeMobileMenu}
+        >
+          {t("nav.home")}
+        </NavLink>
+        <NavLink 
+          to="/booking" 
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+          onClick={closeMobileMenu}
+        >
+          {t("nav.booking")}
+        </NavLink>
+        <NavLink 
+          to="/contact" 
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+          onClick={closeMobileMenu}
+        >
+          {t("nav.contact")}
+        </NavLink>
+        <div className="nav-desktop-lang">
+          <LanguageSwitcher />
+        </div>
       </nav>
     </header>
   );
@@ -177,12 +221,113 @@ const Nav = () => {
 
 const Footer = () => {
   const { t } = useTranslation();
+  const [formData, setFormData] = useState({ name: "", phone: "", message: "" });
+  const [status, setStatus] = useState({ type: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setStatus({ type: "", message: "" });
+
+    try {
+      const apiBase = import.meta.env.VITE_API_BASE || "/api";
+      const response = await fetch(`${apiBase}/contact/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.ok) {
+        setStatus({ type: "success", message: t("footer.contact.success") || "Thanks, we'll get back to you." });
+        setFormData({ name: "", phone: "", message: "" });
+      } else {
+        setStatus({ type: "error", message: t("footer.contact.error") || "Something went wrong, please try again." });
+      }
+    } catch (error) {
+      setStatus({ type: "error", message: t("footer.contact.error") || "Something went wrong, please try again." });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <footer className="footer">
-      <div className="container" style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-        <div>© {new Date().getFullYear()} {t("brand")}</div>
-        <div className="help">
-          {t("footer.address")} — <span style={{ color: "var(--bronze)" }}>{t("footer.open")}</span>
+      <div className="container">
+        <div className="footer-content">
+          <div className="footer-info">
+            <div>© {new Date().getFullYear()} {t("brand")}</div>
+            <div className="help">
+              {t("footer.address")} — <span style={{ color: "var(--bronze)" }}>{t("footer.open")}</span>
+            </div>
+          </div>
+          
+          <div className="footer-contact">
+            <h3>{t("footer.contact.title") || "Contact / Kontakt"}</h3>
+            <form onSubmit={handleSubmit} className="contact-form">
+              <div className="form-group">
+                <label htmlFor="contact-name" className="label">
+                  {t("footer.contact.name") || "Name"} <span className="required">*</span>
+                </label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="input"
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="contact-phone" className="label">
+                  {t("footer.contact.phone") || "Phone"}
+                </label>
+                <input
+                  id="contact-phone"
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="input"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="contact-message" className="label">
+                  {t("footer.contact.message") || "Message"} <span className="required">*</span>
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  className="input textarea"
+                  rows="4"
+                  required
+                />
+              </div>
+              
+              <button type="submit" className="btn" disabled={submitting}>
+                {submitting ? (t("footer.contact.sending") || "Sending...") : (t("footer.contact.submit") || "Send Message")}
+              </button>
+              
+              {status.message && (
+                <div className={`form-status ${status.type}`}>
+                  {status.message}
+                </div>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </footer>
@@ -198,6 +343,7 @@ export default function App() {
         <Route path="/booking" element={<Booking />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/thanks" element={<ThankYou />} />
+        <Route path="/admin/schedule" element={<AdminSchedule />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

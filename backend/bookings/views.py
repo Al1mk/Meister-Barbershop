@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError as DRFValidationError
 from rest_framework.response import Response
 
-from barbers.models import Barber
+from barbers.models import Barber, TimeOff
 
 from .models import (
     Appointment,
@@ -65,12 +65,26 @@ def _collect_bookings(barber: Barber, start_date: date, end_date: date) -> dict[
     return bookings
 
 
+def _collect_time_off_dates(barber: Barber, start_date: date, end_date: date) -> set[date]:
+    blocked: set[date] = set()
+    for window in TimeOff.objects.filter(barber=barber, start_date__lte=end_date, end_date__gte=start_date):
+        current = window.start_date
+        while current <= window.end_date:
+            blocked.add(current)
+            current += timedelta(days=1)
+    return blocked
+
+
 def _generate_daily_slots(
     barber: Barber,
     target_date: date,
     duration_minutes: int,
     existing: list[tuple[datetime, datetime]] | None = None,
+    blocked_dates: set[date] | None = None,
 ) -> list[datetime]:
+    if blocked_dates and target_date in blocked_dates:
+        return []
+
     today_local = timezone.localdate()
     if target_date <= today_local:
         return []
@@ -129,8 +143,25 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         target_date = _parse_date(date_str)
         normalized_type, duration_minutes = _resolve_service_from_request(service_type, duration_raw)
 
+        blocked_dates = _collect_time_off_dates(barber, target_date, target_date)
+        if target_date in blocked_dates:
+            payload = {
+                "date": target_date.isoformat(),
+                "barber": barber.id,
+                "service_type": normalized_type,
+                "duration_minutes": duration_minutes,
+                "slots": [],
+            }
+            return Response(payload)
+
         bookings = _collect_bookings(barber, target_date, target_date)
-        slots = _generate_daily_slots(barber, target_date, duration_minutes, bookings.get(target_date))
+        slots = _generate_daily_slots(
+            barber,
+            target_date,
+            duration_minutes,
+            bookings.get(target_date),
+            blocked_dates=blocked_dates,
+        )
         payload = {
             "date": target_date.isoformat(),
             "barber": barber.id,
@@ -171,12 +202,25 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         normalized_type, duration_minutes = _resolve_service_from_request(service_type, duration_raw)
 
         bookings = _collect_bookings(barber, start_date, end_date)
+        blocked_dates = _collect_time_off_dates(barber, start_date, end_date)
 
         days = []
         current = start_date
         while current <= end_date:
-            possible_slots = _generate_daily_slots(barber, current, duration_minutes, [])
-            free_slots = _generate_daily_slots(barber, current, duration_minutes, bookings.get(current))
+            possible_slots = _generate_daily_slots(
+                barber,
+                current,
+                duration_minutes,
+                [],
+                blocked_dates=blocked_dates,
+            )
+            free_slots = _generate_daily_slots(
+                barber,
+                current,
+                duration_minutes,
+                bookings.get(current),
+                blocked_dates=blocked_dates,
+            )
             days.append(
                 {
                     "date": current.isoformat(),
