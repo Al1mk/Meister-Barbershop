@@ -88,6 +88,8 @@ class Appointment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     confirmation_sent_at = models.DateTimeField(null=True, blank=True)
+    reminder_sent = models.BooleanField(default=False)
+    review_requested = models.BooleanField(default=False)
     review_request_sent_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
