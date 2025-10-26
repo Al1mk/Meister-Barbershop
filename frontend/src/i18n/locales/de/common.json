@@ -14,7 +14,17 @@
   },
   "footer": {
     "address": "Deutschland, Erlangen, Hauptstraße 12 — Meister Barbershop",
-    "open": "Geöffnet Mo–Sa"
+    "open": "Geöffnet Mo–Sa",
+    "contact": {
+      "title": "Kontakt",
+      "name": "Name",
+      "phone": "Telefon",
+      "message": "Nachricht",
+      "submit": "Nachricht senden",
+      "sending": "Wird gesendet...",
+      "success": "Danke, wir melden uns bei Ihnen.",
+      "error": "Etwas ist schief gelaufen, bitte versuchen Sie es erneut."
+    }
   },
   "home": {
     "badge": "Meister • Bronze Line",

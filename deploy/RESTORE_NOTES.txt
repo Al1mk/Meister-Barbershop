@@ -1,0 +1,4 @@
+To restore the latest Meister MySQL backup into the running db container:
+  latest=$(ls -1t /srv/backups/mysql/*.sql.gz | head -n1)
+  zcat "$latest" | docker compose -f /srv/meister/docker-compose.yml exec -T db sh -lc 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"'
+Replace $latest with a specific backup file as needed before running the command.

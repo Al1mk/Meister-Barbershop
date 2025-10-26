@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
-from barbers.models import Barber
+from barbers.models import Barber, TimeOff
 
 SALON_TIME_ZONE = ZoneInfo(getattr(settings, "TIME_ZONE", "Europe/Berlin"))
 
@@ -84,6 +84,7 @@ class Appointment(models.Model):
         choices=[("booked", "booked"), ("completed", "completed"), ("cancelled", "cancelled")],
         default="booked",
     )
+    cancel_reason = models.CharField(max_length=120, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     confirmation_sent_at = models.DateTimeField(null=True, blank=True)
@@ -148,6 +149,13 @@ class Appointment(models.Model):
             if weekday not in allowed_days:
                 raise ValidationError("این آرایشگر در روز انتخاب‌شده کار نمی‌کند.")
 
+            if TimeOff.objects.filter(
+                barber=barber,
+                start_date__lte=start_local.date(),
+                end_date__gte=start_local.date(),
+            ).exists():
+                raise ValidationError("این تاریخ برای آرایشگر مسدود شده است.")
+
         slot_start_time = start_local.time().replace(second=0, microsecond=0)
         if start_local.second != 0 or start_local.microsecond != 0:
             raise ValidationError("رزرو باید سرِ دقیقه انجام شود.")
@@ -183,6 +191,8 @@ class Appointment(models.Model):
 
     def save(self, *args, **kwargs):
         self.full_clean()
+        if self.status != "cancelled":
+            self.cancel_reason = ""
         return super().save(*args, **kwargs)
 
     def __str__(self) -> str:

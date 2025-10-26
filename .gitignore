@@ -19,3 +19,17 @@ build/
 .DS_Store
 .idea/
 .vscode/Thu Oct 16 09:30:02 PM +0330 2025
+
+# Backups
+backups/
+*.sql
+*.sql.gz
+
+# Secrets
+*/.env
+*.pem
+*.key
+
+# Logs
+*.log
+/var/log/

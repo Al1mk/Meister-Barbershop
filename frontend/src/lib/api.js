@@ -1,11 +1,18 @@
 import i18n from "../i18n/index.js";
 
 const DEFAULT_API_BASE = import.meta.env.PROD ? "/api" : "http://localhost:8000";
-export const API_BASE = (import.meta.env.VITE_API_BASE?.replace(/\/+$/, "") || DEFAULT_API_BASE);
+export const API_BASE = import.meta.env.VITE_API_BASE
+  ? import.meta.env.VITE_API_BASE.replace(/\/+$/, "")
+  : DEFAULT_API_BASE;
 
 function buildUrl(path) {
   if (path.startsWith("http")) return path;
-  return `${API_BASE}${path.startsWith("/") ? "" : "/"}${path}`;
+  const base = (API_BASE || "").replace(/\/+$/, "");
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  if (base.endsWith("/api") && normalizedPath.startsWith("/api/")) {
+    return `${base}${normalizedPath.slice(4)}`;
+  }
+  return `${base}${normalizedPath}`;
 }
 
 async function parseResponse(response) {
@@ -35,6 +42,29 @@ function extractError(data, fallback) {
     (Array.isArray(data.customer) ? data.customer[0] : undefined) ??
     fallback
   );
+}
+
+function buildAdminHeaders(password) {
+  const token = btoa(`admin:${password ?? ""}`);
+  return {
+    Authorization: `Basic ${token}`,
+  };
+}
+
+async function adminFetch(path, { method = "GET", body, password } = {}) {
+  const headers = buildAdminHeaders(password);
+  let payload;
+  if (body !== undefined) {
+    headers["Content-Type"] = "application/json";
+    payload = JSON.stringify(body);
+  }
+  const response = await fetch(buildUrl(path), {
+    method,
+    headers,
+    body: payload,
+  });
+  const { data, raw } = await parseResponse(response);
+  return { ok: response.ok, status: response.status, data, raw };
 }
 
 export async function getBarbers() {
@@ -111,12 +141,12 @@ export async function sendContact(payload) {
 }
 
 export async function getReviews(lang) {
-  const url = new URL(buildUrl('/api/reviews/'));
+  const url = new URL(buildUrl("/api/reviews/"));
   if (lang) {
-    url.searchParams.set('lang', lang);
+    url.searchParams.set("lang", lang);
   }
   const response = await fetch(url.toString());
-  if (!response.ok) throw new Error(i18n.t('home.reviews.error'));
+  if (!response.ok) throw new Error(i18n.t("home.reviews.error"));
   return response.json();
 }
 
@@ -124,3 +154,48 @@ export function resolveMedia(path) {
   if (!path) return null;
   return buildUrl(path);
 }
+
+export async function listTimeOff(barberId, password) {
+  const { ok, data, raw } = await adminFetch(`/api/admin/barbers/${barberId}/timeoff`, { password });
+  if (!ok) {
+    const fallback = "Failed to load time-off";
+    throw new Error(extractError(data, fallback) || raw || fallback);
+  }
+  return data;
+}
+
+export async function createTimeOff(barberId, payload, password) {
+  return adminFetch(`/api/admin/barbers/${barberId}/timeoff`, {
+    method: "POST",
+    body: payload,
+    password,
+  });
+}
+
+export async function deleteTimeOff(timeOffId, password) {
+  const { ok, data, raw } = await adminFetch(`/api/admin/timeoff/${timeOffId}`, {
+    method: "DELETE",
+    password,
+  });
+  if (!ok) {
+    const fallback = "Failed to delete time-off";
+    throw new Error(extractError(data, fallback) || raw || fallback);
+  }
+}
+
+export async function fetchTimeOffConflicts(params, password) {
+  const url = new URL(buildUrl("/api/admin/timeoff/conflicts"));
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      url.searchParams.set(key, value);
+    }
+  });
+  const { ok, data, raw } = await adminFetch(url.toString(), { password });
+  if (!ok) {
+    const fallback = "Failed to load conflicts";
+    throw new Error(extractError(data, fallback) || raw || fallback);
+  }
+  return data;
+}
+
+export { extractError };

@@ -5,10 +5,12 @@ from rest_framework import serializers
 
 from .models import Appointment, Customer
 
+
 class CustomerInlineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ["name","email","phone"]
+        fields = ["name", "email", "phone"]
+
 
 class AppointmentCreateSerializer(serializers.ModelSerializer):
     customer = CustomerInlineSerializer()
@@ -69,8 +71,10 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(exc.message_dict or exc.messages)
         return appt
 
+
 class AppointmentOutSerializer(serializers.ModelSerializer):
     customer = CustomerInlineSerializer()
+
     class Meta:
         model = Appointment
         fields = [
@@ -81,6 +85,7 @@ class AppointmentOutSerializer(serializers.ModelSerializer):
             "service_type",
             "duration_minutes",
             "status",
+            "cancel_reason",
             "customer",
             "confirmation_sent_at",
             "review_request_sent_at",
