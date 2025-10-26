@@ -7,3 +7,4 @@ Pillow==10.4.0
 requests==2.32.3
 gunicorn==21.2.0
 mysqlclient==2.2.4
+twilio==9.3.7
