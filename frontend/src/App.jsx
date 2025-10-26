@@ -9,7 +9,6 @@ import flagDe from "./assets/flags/de.png";
 
 import Home from "./pages/Home.jsx";
 import Booking from "./pages/Booking.jsx";
-import Contact from "./pages/Contact.jsx";
 import ThankYou from "./pages/ThankYou.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import AdminSchedule from "./pages/AdminSchedule.jsx";
@@ -197,19 +196,12 @@ const Nav = () => {
         >
           {t("nav.home")}
         </NavLink>
-        <NavLink 
-          to="/booking" 
+        <NavLink
+          to="/booking"
           className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
           onClick={closeMobileMenu}
         >
           {t("nav.booking")}
-        </NavLink>
-        <NavLink 
-          to="/contact" 
-          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
-          onClick={closeMobileMenu}
-        >
-          {t("nav.contact")}
         </NavLink>
         <div className="nav-desktop-lang">
           <LanguageSwitcher />
@@ -341,7 +333,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/booking" element={<Booking />} />
-        <Route path="/contact" element={<Contact />} />
         <Route path="/thanks" element={<ThankYou />} />
         <Route path="/admin/schedule" element={<AdminSchedule />} />
         <Route path="*" element={<NotFound />} />
