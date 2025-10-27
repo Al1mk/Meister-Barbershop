@@ -397,3 +397,51 @@ a{color:var(--bronze);text-decoration:none}
     gap: 14px;
   }
 }
+
+/* Mobile Book Now CTA */
+.mobile-book-now-cta {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  
+  /* Styling */
+  background: #000000;
+  color: #B08D57;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 32px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  
+  /* Size */
+  min-width: 200px;
+  height: 48px;
+  
+  /* Visual effects */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  
+  /* Animation */
+  transition: all 0.2s ease;
+}
+
+.mobile-book-now-cta:hover {
+  background: #1a1a1a;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6), 0 3px 6px rgba(0, 0, 0, 0.4);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.mobile-book-now-cta:active {
+  transform: translateX(-50%) translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Support for safe area insets on devices with notches */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .mobile-book-now-cta {
+    bottom: calc(env(safe-area-inset-bottom) + 1rem);
+  }
+}
