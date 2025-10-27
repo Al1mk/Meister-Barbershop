@@ -40,3 +40,4 @@ jobs:
           context: ./frontend
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/meister-frontend:latest
+# Testing GHCR workflow with updated permissions
