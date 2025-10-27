@@ -13,6 +13,9 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_OWNER: al1mk
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,7 +23,7 @@ jobs:
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -29,11 +32,11 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/al1mk/meister-backend:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/meister-backend:latest
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           push: true
-          tags: ghcr.io/al1mk/meister-frontend:latest
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/meister-frontend:latest
