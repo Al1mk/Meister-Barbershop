@@ -208,9 +208,5 @@
   ],
   "alerts": {
     "contactInvalid": "Please fill name, message, and a contact method."
-  },
-  "mobileBookNow": {
-    "text": "📅 Book Now",
-    "ariaLabel": "Book an appointment"
   }
 }

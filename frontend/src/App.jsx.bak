@@ -1,5 +1,3 @@
-// Build: 1761573603477724781
-// Build timestamp: 1761573561
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -14,7 +12,6 @@ import Booking from "./pages/Booking.jsx";
 import ThankYou from "./pages/ThankYou.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import AdminSchedule from "./pages/AdminSchedule.jsx";
-import MobileBookNowCTA from "./components/MobileBookNowCTA.jsx";
 
 const languages = [
   { code: "en", flag: flagUs, alt: "English (United States)" },
@@ -340,7 +337,6 @@ export default function App() {
         <Route path="/admin/schedule" element={<AdminSchedule />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <MobileBookNowCTA />
       <Footer />
     </BrowserRouter>
   );

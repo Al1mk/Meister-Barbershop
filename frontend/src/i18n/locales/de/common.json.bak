@@ -208,9 +208,5 @@
   ],
   "alerts": {
     "contactInvalid": "Bitte gib Name, Nachricht und einen Kontaktweg an."
-  },
-  "mobileBookNow": {
-    "text": "📅 Jetzt buchen",
-    "ariaLabel": "Termin buchen"
   }
 }

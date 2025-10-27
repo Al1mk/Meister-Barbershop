@@ -443,7 +443,7 @@ export default function Booking() {
   };
 
   return (
-    <div id="booking-section" className="container">
+    <div className="container">
       <h2 style={{ color: "var(--bronze)" }}>{t("booking.title")}</h2>
       <div className="help">{t("booking.step", { current: step, total: 3 })}</div>
 
