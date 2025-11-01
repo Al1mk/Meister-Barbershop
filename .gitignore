@@ -33,3 +33,16 @@ backups/
 # Logs
 *.log
 /var/log/
+
+# Additional security patterns
+**/*.env
+*.crt
+.next/
+.cache/
+logs/
+.docker/
+
+# Backup files
+*.bak.*
+*.bak
+.bak.*
