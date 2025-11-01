@@ -54,6 +54,7 @@ const truncateText = (text) => {
 };
 
 export default function ReviewsCarousel() {
+  console.log("📢 ReviewsCarousel mounted");
   const { t, i18n } = useTranslation();
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
@@ -71,14 +72,17 @@ export default function ReviewsCarousel() {
   useEffect(() => {
     let cancelled = false;
     setError("");
+    console.log("📡 Fetching reviews from /api/reviews/ with lang:", i18n.language);
     getReviews(i18n.language)
       .then((payload) => {
         if (!cancelled) {
+          console.log("✅ Reviews fetched successfully:", payload);
           setData(payload);
         }
       })
-      .catch(() => {
+      .catch((err) => {
         if (!cancelled) {
+          console.error("❌ Failed to fetch reviews:", err);
           setError(t("home.reviews.error"));
         }
       });
