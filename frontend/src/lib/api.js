@@ -6,13 +6,9 @@ export const API_BASE = import.meta.env.VITE_API_BASE
   : DEFAULT_API_BASE;
 
 function buildUrl(path) {
-  if (path.startsWith("http")) return path;
-  const base = (API_BASE || "").replace(/\/+$/, "");
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  if (base.endsWith("/api") && normalizedPath.startsWith("/api/")) {
-    return `${base}${normalizedPath.slice(4)}`;
-  }
-  return `${base}${normalizedPath}`;
+  const base = import.meta.env.VITE_API_BASE || "/api";
+  const joined = `${base.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+  return new URL(joined, window.location.origin).toString();
 }
 
 async function parseResponse(response) {
@@ -68,13 +64,13 @@ async function adminFetch(path, { method = "GET", body, password } = {}) {
 }
 
 export async function getBarbers() {
-  const response = await fetch(buildUrl("/api/barbers/"));
+  const response = await fetch(buildUrl("/barbers/"));
   if (!response.ok) throw new Error(i18n.t("booking.errors.loadBarbers"));
   return response.json();
 }
 
 export async function getSlots(barberId, dateISO, { serviceType, durationMinutes } = {}) {
-  const url = new URL(buildUrl("/api/appointments/slots/"));
+  const url = new URL(buildUrl("/appointments/slots/"));
   url.searchParams.set("barber_id", barberId);
   url.searchParams.set("date", dateISO);
   if (serviceType) {
@@ -89,7 +85,7 @@ export async function getSlots(barberId, dateISO, { serviceType, durationMinutes
 }
 
 export async function getAvailability(barberId, startISO, endISO, { serviceType, durationMinutes } = {}) {
-  const url = new URL(buildUrl("/api/appointments/availability/"));
+  const url = new URL(buildUrl("/appointments/availability/"));
   url.searchParams.set("barber_id", barberId);
   url.searchParams.set("start", startISO);
   url.searchParams.set("end", endISO);
@@ -105,7 +101,7 @@ export async function getAvailability(barberId, startISO, endISO, { serviceType,
 }
 
 export async function createAppointment(payload) {
-  const response = await fetch(buildUrl("/api/appointments/"), {
+  const response = await fetch(buildUrl("/appointments/"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -123,7 +119,7 @@ export async function createAppointment(payload) {
 }
 
 export async function sendContact(payload) {
-  const response = await fetch(buildUrl("/api/contact/"), {
+  const response = await fetch(buildUrl("/contact/"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -141,7 +137,7 @@ export async function sendContact(payload) {
 }
 
 export async function getReviews(lang) {
-  const url = new URL(buildUrl("/api/reviews/"));
+  const url = new URL(buildUrl("/reviews/"));
   if (lang) {
     url.searchParams.set("lang", lang);
   }
@@ -156,7 +152,7 @@ export function resolveMedia(path) {
 }
 
 export async function listTimeOff(barberId, password) {
-  const { ok, data, raw } = await adminFetch(`/api/admin/barbers/${barberId}/timeoff`, { password });
+  const { ok, data, raw } = await adminFetch(`/admin/barbers/${barberId}/timeoff`, { password });
   if (!ok) {
     const fallback = "Failed to load time-off";
     throw new Error(extractError(data, fallback) || raw || fallback);
@@ -165,7 +161,7 @@ export async function listTimeOff(barberId, password) {
 }
 
 export async function createTimeOff(barberId, payload, password) {
-  return adminFetch(`/api/admin/barbers/${barberId}/timeoff`, {
+  return adminFetch(`/admin/barbers/${barberId}/timeoff`, {
     method: "POST",
     body: payload,
     password,
@@ -173,7 +169,7 @@ export async function createTimeOff(barberId, payload, password) {
 }
 
 export async function deleteTimeOff(timeOffId, password) {
-  const { ok, data, raw } = await adminFetch(`/api/admin/timeoff/${timeOffId}`, {
+  const { ok, data, raw } = await adminFetch(`/admin/timeoff/${timeOffId}`, {
     method: "DELETE",
     password,
   });
@@ -184,7 +180,7 @@ export async function deleteTimeOff(timeOffId, password) {
 }
 
 export async function fetchTimeOffConflicts(params, password) {
-  const url = new URL(buildUrl("/api/admin/timeoff/conflicts"));
+  const url = new URL(buildUrl("/admin/timeoff/conflicts"));
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       url.searchParams.set(key, value);
