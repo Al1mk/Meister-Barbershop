@@ -349,14 +349,22 @@ export default function Booking() {
 
     (async () => {
       try {
+        console.log("📡 Fetching slots from /api/appointments/slots/ with params:", {
+          barberId,
+          date: normalizedDate,
+          serviceType,
+          durationMinutes: serviceDuration
+        });
         const data = await getSlots(barberId, normalizedDate, {
           serviceType,
           durationMinutes: serviceDuration,
         });
         if (cancelled) return;
+        console.log("✅ Slots fetched successfully:", data);
         setSlots(Array.isArray(data.slots) ? data.slots : []);
       } catch (err) {
         if (!cancelled) {
+          console.error("❌ Failed to fetch slots:", err);
           setSlots([]);
           setError(t("booking.errors.loadSlots"));
         }
