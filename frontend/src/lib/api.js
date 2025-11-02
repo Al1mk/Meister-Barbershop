@@ -25,9 +25,9 @@ async function parseResponse(response) {
 }
 
 function extractError(data, fallback) {
-  if (!data) return fallback;
-  if (typeof data === "string") return data;
-  if (Array.isArray(data)) return data[0] ?? fallback;
+  if (!data) {return fallback;}
+  if (typeof data === "string") {return data;}
+  if (Array.isArray(data)) {return data[0] ?? fallback;}
   return (
     data.detail ??
     data.error ??
@@ -65,7 +65,7 @@ async function adminFetch(path, { method = "GET", body, password } = {}) {
 
 export async function getBarbers() {
   const response = await fetch(buildUrl("/barbers/"));
-  if (!response.ok) throw new Error(i18n.t("booking.errors.loadBarbers"));
+  if (!response.ok) {throw new Error(i18n.t("booking.errors.loadBarbers"));}
   return response.json();
 }
 
@@ -80,7 +80,7 @@ export async function getSlots(barberId, dateISO, { serviceType, durationMinutes
     url.searchParams.set("duration_minutes", String(durationMinutes));
   }
   const response = await fetch(url);
-  if (!response.ok) throw new Error(i18n.t("booking.errors.loadSlots"));
+  if (!response.ok) {throw new Error(i18n.t("booking.errors.loadSlots"));}
   return response.json();
 }
 
@@ -96,7 +96,7 @@ export async function getAvailability(barberId, startISO, endISO, { serviceType,
     url.searchParams.set("duration_minutes", String(durationMinutes));
   }
   const response = await fetch(url);
-  if (!response.ok) throw new Error(i18n.t("booking.errors.loadSlots"));
+  if (!response.ok) {throw new Error(i18n.t("booking.errors.loadSlots"));}
   return response.json();
 }
 
@@ -142,12 +142,12 @@ export async function getReviews(lang) {
     url.searchParams.set("lang", lang);
   }
   const response = await fetch(url.toString());
-  if (!response.ok) throw new Error(i18n.t("home.reviews.error"));
+  if (!response.ok) {throw new Error(i18n.t("home.reviews.error"));}
   return response.json();
 }
 
 export function resolveMedia(path) {
-  if (!path) return null;
+  if (!path) {return null;}
   return buildUrl(path);
 }
 

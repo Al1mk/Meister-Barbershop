@@ -1,0 +1,79 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
+
+jobs:
+  lint-and-build:
+    name: Lint, Build & Smoke Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Build frontend
+        run: npm run build
+        env:
+          VITE_API_BASE: /api
+
+      - name: Run smoke tests
+        run: npm run smoke
+        env:
+          SMOKE_TEST_URL: https://www.meisterbarbershop.de
+        # Allow smoke tests to fail without breaking CI
+        # (prod might be down during deployment)
+        continue-on-error: true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 7
+
+  quality-summary:
+    name: Quality Summary
+    runs-on: ubuntu-latest
+    needs: lint-and-build
+    if: always()
+
+    steps:
+      - name: Check build result
+        run: |
+          if [ "${{ needs.lint-and-build.result }}" == "success" ]; then
+            echo "✅ All quality checks passed!"
+            exit 0
+          else
+            echo "❌ Quality checks failed!"
+            exit 1
+          fi

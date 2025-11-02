@@ -29,7 +29,7 @@ function addMonthsISO(iso, amount) {
 }
 
 function compareISO(a, b) {
-  if (a === b) return 0;
+  if (a === b) {return 0;}
   return a < b ? -1 : 1;
 }
 
@@ -157,7 +157,7 @@ export default function CalendarPicker({
 
   const focusButton = useCallback(
     (iso, attempt = 0) => {
-      if (!iso) return;
+      if (!iso) {return;}
       const schedule = requestFrameRef.current;
       schedule(() => {
         const node = buttonRefs.current.get(iso);
@@ -183,7 +183,7 @@ export default function CalendarPicker({
 
   const handleSelect = useCallback(
     (iso, state) => {
-      if (state.disabled) return;
+      if (state.disabled) {return;}
       onSelectDate?.(iso);
       setFocusDate(iso);
     },
@@ -287,7 +287,7 @@ export default function CalendarPicker({
   const monthLabel = monthFormatter.format(monthDate);
 
   const validFocusIso = useMemo(() => {
-    if (!focusDate) return null;
+    if (!focusDate) {return null;}
     const entry = dayEntryMap.get(focusDate);
     if (entry && !entry.state.disabled && !entry.outside) {
       return focusDate;
@@ -296,7 +296,7 @@ export default function CalendarPicker({
   }, [dayEntryMap, focusDate]);
 
   const tabStopIso = useMemo(() => {
-    if (validFocusIso) return validFocusIso;
+    if (validFocusIso) {return validFocusIso;}
     if (selectedEntry && !selectedEntry.state.disabled && !selectedEntry.outside) {
       return selectedEntry.iso;
     }

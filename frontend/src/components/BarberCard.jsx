@@ -26,7 +26,7 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
   const [isHovering, setIsHovering] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isTouchMode, setIsTouchMode] = useState(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return false;
+    if (typeof window === "undefined" || !window.matchMedia) {return false;}
     try {
       return (
         window.matchMedia("(hover: none)").matches ||
@@ -46,6 +46,18 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
   const initials = primaryInitial || fallbackInitial || "?";
   const photo = resolveMedia(barber?.photo);
 
+  // Generate WebP version of the photo URL if it's a JPEG/JPG
+  const photoWebP = useMemo(() => {
+    if (!photo) {
+      return null;
+    }
+    // Only convert if it's a .jpg or .jpeg file
+    if (photo.match(/\.(jpe?g)$/i)) {
+      return photo.replace(/\.(jpe?g)$/i, '.webp');
+    }
+    return null;
+  }, [photo]);
+
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
 
@@ -55,7 +67,7 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
   }, [photo]);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return undefined;
+    if (typeof window === "undefined" || !window.matchMedia) {return undefined;}
     const hoverQuery = window.matchMedia("(hover: none)");
     const pointerQuery = window.matchMedia("(pointer: coarse)");
     const update = () => {
@@ -93,7 +105,7 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
   const showSkeleton = photo && !errored && !loaded;
 
   const resetTilt = useCallback(() => {
-    if (!cardRef.current) return;
+    if (!cardRef.current) {return;}
     cardRef.current.style.setProperty("--tiltX", "0deg");
     cardRef.current.style.setProperty("--tiltY", "0deg");
   }, []);
@@ -106,7 +118,7 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
 
   const applyTilt = useCallback(
     (clientX, clientY) => {
-      if (!cardRef.current || prefersReducedMotion) return;
+      if (!cardRef.current || prefersReducedMotion) {return;}
       const rect = cardRef.current.getBoundingClientRect();
       const offsetX = clientX - (rect.left + rect.width / 2);
       const offsetY = clientY - (rect.top + rect.height / 2);
@@ -116,7 +128,7 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
         cancelAnimationFrame(frameRef.current);
       }
       frameRef.current = requestAnimationFrame(() => {
-        if (!cardRef.current) return;
+        if (!cardRef.current) {return;}
         cardRef.current.style.setProperty("--tiltX", `${rotateX.toFixed(2)}deg`);
         cardRef.current.style.setProperty("--tiltY", `${rotateY.toFixed(2)}deg`);
       });
@@ -190,7 +202,7 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
       onMouseEnter={() => !isTouchMode && setIsHovering(true)}
       onMouseLeave={() => {
         setIsHovering(false);
-        if (!prefersReducedMotion) resetTilt();
+        if (!prefersReducedMotion) {resetTilt();}
       }}
       onFocusCapture={handleFocus}
       onBlurCapture={handleBlur}
@@ -217,17 +229,23 @@ export default function BarberCard({ barber, selected, onSelect, onBook }) {
           <div className="avatar-shell">
             {showSkeleton && <div className="avatar-skeleton" aria-hidden="true" />}
             {photo && !errored && (
-              <img
-                src={photo}
-                loading="lazy"
-                alt={displayName || t("booking.barberCard.altFallback")}
-                className={`avatar-img ${loaded ? "is-visible" : ""}`}
-                onLoad={() => setLoaded(true)}
-                onError={() => {
-                  setErrored(true);
-                  setLoaded(true);
-                }}
-              />
+              <picture>
+                {photoWebP && (
+                  <source type="image/webp" srcSet={photoWebP} />
+                )}
+                <img
+                  src={photo}
+                  loading="lazy"
+                  decoding="async"
+                  alt={displayName || t("booking.barberCard.altFallback")}
+                  className={`avatar-img ${loaded ? "is-visible" : ""}`}
+                  onLoad={() => setLoaded(true)}
+                  onError={() => {
+                    setErrored(true);
+                    setLoaded(true);
+                  }}
+                />
+              </picture>
             )}
             {(!photo || errored) && <span className="avatar-initial">{initials}</span>}
           </div>
