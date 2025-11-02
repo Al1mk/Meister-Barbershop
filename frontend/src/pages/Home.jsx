@@ -37,7 +37,7 @@ export default function Home() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
+    if (typeof window === "undefined" || !window.matchMedia) {return;}
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updatePreference = () => {
       prefersReducedMotionRef.current = mediaQuery.matches;
@@ -56,22 +56,22 @@ export default function Home() {
       return;
     }
     const element = heroVisualRef.current;
-    if (!element) return;
+    if (!element) {return;}
     let frame = null;
     let lastValue = 0;
 
     const clampOffset = () => {
-      if (!element) return;
+      if (!element) {return;}
       const scrollY = window.scrollY || window.pageYOffset || 0;
       const maxOffset = window.innerWidth < 768 ? 12 : 20;
       const next = Math.min(maxOffset, scrollY * 0.12);
-      if (Math.abs(next - lastValue) < 0.5) return;
+      if (Math.abs(next - lastValue) < 0.5) {return;}
       element.style.transform = `translateY(${next.toFixed(2)}px)`;
       lastValue = next;
     };
 
     const onScroll = () => {
-      if (frame) return;
+      if (frame) {return;}
       frame = requestAnimationFrame(() => {
         frame = null;
         clampOffset();
@@ -83,14 +83,14 @@ export default function Home() {
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      if (frame) cancelAnimationFrame(frame);
-      if (element) element.style.transform = "";
+      if (frame) {cancelAnimationFrame(frame);}
+      if (element) {element.style.transform = "";}
     };
   }, [prefersReducedMotion]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!navigator.geolocation) return;
+    if (typeof window === "undefined") {return;}
+    if (!navigator.geolocation) {return;}
     const destination = getDestinationParam();
     const travelMode = "travelmode=driving";
     navigator.geolocation.getCurrentPosition(
@@ -109,12 +109,12 @@ export default function Home() {
   useEffect(() => {
     const elements = [];
     featureRefs.current.forEach((el) => {
-      if (el) elements.push(el);
+      if (el) {elements.push(el);}
     });
     if (offerRef.current) {
       elements.push(offerRef.current);
     }
-    if (!elements.length) return;
+    if (!elements.length) {return;}
 
     if (prefersReducedMotionRef.current) {
       elements.forEach((el) => el.classList.add("is-visible"));
@@ -139,7 +139,7 @@ export default function Home() {
   }, [features.length, prefersReducedMotion]);
 
   const openDirections = useCallback(() => {
-    if (!directionsUrl) return;
+    if (!directionsUrl) {return;}
     window.open(directionsUrl, "_blank", "noopener,noreferrer");
   }, [directionsUrl]);
 
