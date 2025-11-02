@@ -7,14 +7,14 @@ const AUTOPLAY_INTERVAL = 5000;
 const MAX_TEXT_LENGTH = 220;
 
 const formatRelativeTime = (timestamp, locale) => {
-  if (!timestamp) return "";
+  if (!timestamp) {return "";}
   let date;
   if (typeof timestamp === "number") {
     date = new Date(timestamp * 1000);
   } else {
     date = new Date(timestamp);
   }
-  if (Number.isNaN(date.getTime())) return "";
+  if (Number.isNaN(date.getTime())) {return "";}
   const now = Date.now();
   const diff = now - date.getTime();
   const units = [
@@ -48,8 +48,8 @@ const StarRating = ({ value, label }) => {
 };
 
 const truncateText = (text) => {
-  if (!text) return "";
-  if (text.length <= MAX_TEXT_LENGTH) return text;
+  if (!text) {return "";}
+  if (text.length <= MAX_TEXT_LENGTH) {return text;}
   return `${text.slice(0, MAX_TEXT_LENGTH).trim()}…`;
 };
 
@@ -112,14 +112,14 @@ export default function ReviewsCarousel() {
 
   const next = useCallback(() => {
     setCurrentIndex((prev) => {
-      if (!hasMultiple) return 0;
+      if (!hasMultiple) {return 0;}
       return prev >= maxIndex ? 0 : prev + 1;
     });
   }, [hasMultiple, maxIndex]);
 
   const prev = useCallback(() => {
     setCurrentIndex((prev) => {
-      if (!hasMultiple) return 0;
+      if (!hasMultiple) {return 0;}
       if (prev <= 0) {
         return maxIndex;
       }
@@ -128,8 +128,8 @@ export default function ReviewsCarousel() {
   }, [hasMultiple, maxIndex]);
 
   useEffect(() => {
-    if (prefersReducedMotion || !hasMultiple) return undefined;
-    if (isPaused) return undefined;
+    if (prefersReducedMotion || !hasMultiple) {return undefined;}
+    if (isPaused) {return undefined;}
     intervalRef.current = setInterval(next, AUTOPLAY_INTERVAL);
     return () => {
       if (intervalRef.current) {

@@ -29,7 +29,7 @@ const DEFAULT_DETAILS = {
 };
 
 export function getBarberDetails(name) {
-  if (!name) return DEFAULT_DETAILS;
+  if (!name) {return DEFAULT_DETAILS;}
   const key = normalizeName(name);
   return BARBER_DETAILS[key] ?? DEFAULT_DETAILS;
 }
