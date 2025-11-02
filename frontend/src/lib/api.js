@@ -147,8 +147,13 @@ export async function getReviews(lang) {
 }
 
 export function resolveMedia(path) {
-  if (!path) return null;
+  if (\!path) return null;
+  // If already an absolute URL, return as-is
+  if (path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
   return buildUrl(path);
+}  return buildUrl(path);}
 }
 
 export async function listTimeOff(barberId, password) {
