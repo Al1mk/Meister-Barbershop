@@ -40,7 +40,7 @@ function dateToISO(date) {
 }
 
 function normalizeToBerlinISO(value) {
-  if (!value) return "";
+  if (!value) {return "";}
   if (typeof value === "string" && value.length >= 10) {
     return value.slice(0, 10);
   }
@@ -92,7 +92,7 @@ function addMonthsISO(iso, amount) {
 }
 
 function compareISO(a, b) {
-  if (a === b) return 0;
+  if (a === b) {return 0;}
   return a < b ? -1 : 1;
 }
 
@@ -193,12 +193,12 @@ export default function Booking() {
     (async () => {
       try {
         const data = await getBarbers();
-        if (!isActive) return;
+        if (!isActive) {return;}
         const normalized = Array.isArray(data) ? data.map((item) => normalizeBarber(item)) : [];
         setBarbers(normalized);
         setError("");
       } catch (err) {
-        if (!isActive) return;
+        if (!isActive) {return;}
         setError(t("booking.errors.loadBarbers"));
       }
     })();
@@ -218,7 +218,7 @@ export default function Booking() {
   }, [barberId, minDateISO]);
 
   useEffect(() => {
-    if (!preselectedBarberId) return;
+    if (!preselectedBarberId) {return;}
     setBarberId(preselectedBarberId);
     setStep(2);
     nav(location.pathname, { replace: true, state: {} });
@@ -306,7 +306,7 @@ export default function Booking() {
           serviceType,
           durationMinutes: serviceDuration,
         });
-        if (cancelled) return;
+        if (cancelled) {return;}
         const entries = {};
         if (data?.days?.length) {
           data.days.forEach((item) => {
@@ -359,7 +359,7 @@ export default function Booking() {
           serviceType,
           durationMinutes: serviceDuration,
         });
-        if (cancelled) return;
+        if (cancelled) {return;}
         console.log("✅ Slots fetched successfully:", data);
         setSlots(Array.isArray(data.slots) ? data.slots : []);
       } catch (err) {
@@ -408,9 +408,9 @@ export default function Booking() {
   );
 
   useEffect(() => {
-    if (!dateStr) return;
+    if (!dateStr) {return;}
     const normalized = normalizeToBerlinISO(dateStr);
-    if (!normalized) return;
+    if (!normalized) {return;}
     const state = getDateState(normalized);
     if (state.disabled) {
       setDateStr("");

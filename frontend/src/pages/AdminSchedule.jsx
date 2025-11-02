@@ -14,7 +14,7 @@ import {
 const SESSION_KEY = "meister-admin-password";
 
 function parseISOToDate(value) {
-  if (!value) return null;
+  if (!value) {return null;}
   const [year, month, day] = value.split("-").map(Number);
   return new Date(year, (month || 1) - 1, day || 1);
 }
@@ -24,7 +24,7 @@ function formatDate(date) {
 }
 
 function formatRangeLabel(start, end) {
-  if (!start) return "";
+  if (!start) {return "";}
   const endLabel = end ? formatDate(end) : formatDate(start);
   const startLabel = formatDate(start);
   return startLabel === endLabel ? startLabel : `${startLabel} → ${endLabel}`;
@@ -37,7 +37,7 @@ export default function AdminSchedule() {
   const [loading, setLoading] = useState(false);
   const [authorized, setAuthorized] = useState(false);
   const [password, setPassword] = useState(() => {
-    if (typeof window === "undefined") return "";
+    if (typeof window === "undefined") {return "";}
     return window.sessionStorage.getItem(SESSION_KEY) || "";
   });
   const [passwordInput, setPasswordInput] = useState("");
@@ -58,7 +58,7 @@ export default function AdminSchedule() {
     let mounted = true;
     getBarbers()
       .then((items) => {
-        if (!mounted) return;
+        if (!mounted) {return;}
         setBarbers(items);
         if (items.length && !selectedBarberId) {
           setSelectedBarberId(items[0].id);
@@ -76,13 +76,13 @@ export default function AdminSchedule() {
   }, []);
 
   useEffect(() => {
-    if (!barbers.length || !password || authorized) return;
+    if (!barbers.length || !password || authorized) {return;}
     verifyPassword(password);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [barbers]);
 
   useEffect(() => {
-    if (!authorized || !selectedBarberId) return;
+    if (!authorized || !selectedBarberId) {return;}
     refreshTimeOffs(selectedBarberId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authorized, selectedBarberId]);
@@ -111,12 +111,12 @@ export default function AdminSchedule() {
       password,
     )
       .then((data) => {
-        if (cancelled) return;
+        if (cancelled) {return;}
         setConflictsPreview(data);
         setConflictsPreviewError("");
       })
       .catch((error) => {
-        if (cancelled) return;
+        if (cancelled) {return;}
         setConflictsPreview(null);
         setConflictsPreviewError(error.message || "Could not check conflicts");
       })
@@ -131,9 +131,9 @@ export default function AdminSchedule() {
   }, [authorized, password, range, selectedBarberId]);
 
   async function verifyPassword(candidate) {
-    if (!barbers.length) return;
+    if (!barbers.length) {return;}
     const barberId = selectedBarberId || barbers[0]?.id;
-    if (!barberId) return;
+    if (!barberId) {return;}
 
     setVerifying(true);
     setAuthError("");
@@ -161,7 +161,7 @@ export default function AdminSchedule() {
   }
 
   async function refreshTimeOffs(barberId) {
-    if (!authorized || !password) return;
+    if (!authorized || !password) {return;}
     setLoading(true);
     setActionError("");
     try {
@@ -192,7 +192,7 @@ export default function AdminSchedule() {
   }
 
   async function handleBlock(force = false) {
-    if (!range?.from || !selectedBarberId) return;
+    if (!range?.from || !selectedBarberId) {return;}
     const fromDate = range.from;
     const toDate = range.to ?? range.from;
     const payload = {
@@ -236,13 +236,13 @@ export default function AdminSchedule() {
   }
 
   async function handleForce() {
-    if (!pendingForcePayload) return;
+    if (!pendingForcePayload) {return;}
     await handleBlock(true);
     setPendingForcePayload(null);
   }
 
   async function handleDelete(timeOffId) {
-    if (typeof window !== "undefined" && !window.confirm("Remove this time-off?")) return;
+    if (typeof window !== "undefined" && !window.confirm("Remove this time-off?")) {return;}
     setSaving(true);
     setActionError("");
     try {
@@ -258,7 +258,7 @@ export default function AdminSchedule() {
   }
 
   const modifiers = useMemo(() => {
-    if (!timeOffs.length) return {};
+    if (!timeOffs.length) {return {};}
     return {
       timeOff: timeOffs.map((record) => ({
         from: parseISOToDate(record.start_date),
