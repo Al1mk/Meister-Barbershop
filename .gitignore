@@ -46,3 +46,15 @@ logs/
 *.bak.*
 *.bak
 .bak.*
+# Hard secret blocks (safety net)
+*.env
+*.pem
+*.key
+*.crt
+*.p12
+*.bak
+*.bak.*
+.env.*
+/backend/.env
+/frontend/.env
+/root/*.tar.gz
