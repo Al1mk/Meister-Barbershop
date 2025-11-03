@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_spectacular",
     "barbers",
-    "bookings",
+    "bookings.apps.BookingsConfig",
     "contact",
     "reviews",
 ]
