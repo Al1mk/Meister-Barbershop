@@ -1,0 +1,29 @@
+services:
+  telegram-bot:
+    build: /srv/telegram-bot
+    container_name: telegram-bot
+    env_file:
+      - /srv/telegram-bot/.env
+    environment:
+      - TZ=Europe/Berlin
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - backend-network
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8787/healthz')\" || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 15s
+
+  backend:
+    environment:
+      - TELEGRAM_BOT_SECRET=${TELEGRAM_BOT_SECRET}
+      - TELEGRAM_NOTIFY_URL=http://telegram-bot:8787/notify
+
+networks:
+  backend-network:
+    driver: bridge
