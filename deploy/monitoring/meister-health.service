@@ -1,0 +1,18 @@
+[Unit]
+Description=Meister Barbershop Health Check
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/meister-health-check.sh
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=meister-health
+
+# Security hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadOnlyPaths=/
