@@ -90,6 +90,9 @@ services:
     - frontend-network
     ports:
     - 127.0.0.1:8000:8000
+    environment:
+      TELEGRAM_BOT_SECRET: ${TELEGRAM_BOT_SECRET}
+      TELEGRAM_NOTIFY_URL: http://telegram-bot:8787/notify
   frontend:
     build:
       context: ./frontend
