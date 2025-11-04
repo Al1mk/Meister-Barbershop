@@ -1,0 +1,78 @@
+# /srv/telegram-bot/app.py
+import os
+import json
+from pathlib import Path
+from fastapi import FastAPI, Request, HTTPException
+from pydantic import BaseModel
+import httpx
+from dotenv import load_dotenv
+
+# Load .env from /srv/telegram-bot/.env (DO NOT print contents)
+env_path = Path("/srv/telegram-bot/.env")
+if not env_path.exists():
+    raise SystemExit("Missing /srv/telegram-bot/.env")
+load_dotenv(env_path)
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_GROUP_ID = os.getenv("TELEGRAM_GROUP_ID")
+BOT_SECRET = os.getenv("BOT_SECRET", "")
+BOT_PORT = int(os.getenv("BOT_PORT", "8787"))
+
+if not TELEGRAM_BOT_TOKEN or not TELEGRAM_GROUP_ID:
+    raise SystemExit("TELEGRAM_BOT_TOKEN and TELEGRAM_GROUP_ID must be set in .env")
+
+TG_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+
+app = FastAPI(title="Telegram Notify", docs_url=None, redoc_url=None)
+
+class NotifyPayload(BaseModel):
+    text: str | None = None
+    appointment: dict | None = None
+    secret: str | None = None
+
+async def send_message(text: str):
+    # Use httpx to post to Telegram API
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.post(TG_API_URL, json={
+            "chat_id": TELEGRAM_GROUP_ID,
+            "text": text,
+            "parse_mode": "HTML",
+            "disable_web_page_preview": True
+        })
+    if resp.status_code != 200:
+        raise HTTPException(status_code=502, detail=f"Telegram API error: {resp.text}")
+    return resp.json()
+
+@app.post("/notify")
+async def notify(payload: NotifyPayload, request: Request):
+    # Basic IP check (only allow localhost)
+    client_host = request.client.host
+    if client_host != "127.0.0.1" and client_host != "localhost":
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    # If BOT_SECRET is set, require it in payload.secret
+    if BOT_SECRET:
+        if not payload.secret or payload.secret != BOT_SECRET:
+            raise HTTPException(status_code=401, detail="Invalid secret")
+
+    if payload.text:
+        text = payload.text
+    elif payload.appointment:
+        appt = payload.appointment
+        # Build a friendly message. Escape HTML characters minimally.
+        def esc(s): 
+            return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        text = "📣 <b>New appointment</b>\\n"
+        text += f"Customer: {esc(appt.get(customer))}\\n"
+        text += f"Barber: {esc(appt.get(barber))}\\n"
+        text += f"Time: {esc(appt.get(time))}\\n"
+        text += f"Service: {esc(appt.get(service))}\\n"
+        if appt.get("notes"):
+            text += f"Notes: {esc(appt.get(notes))}\\n"
+        text += f"ID: {esc(appt.get(id))}"
+    else:
+        raise HTTPException(status_code=400, detail="No text or appointment provided")
+
+    # Send message to Telegram
+    result = await send_message(text)
+    return {"ok": True, "result": result}
