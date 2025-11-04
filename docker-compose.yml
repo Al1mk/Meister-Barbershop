@@ -56,10 +56,9 @@ services:
     build:
       context: ./backend
     image: ghcr.io/al1mk/meister-backend:latest
-    env_file:
-    - backend/.env
     volumes:
     - media_data:/app/media
+    - ./backend/.env:/app/.env:ro
     restart: unless-stopped
     depends_on:
       db:
@@ -90,6 +89,9 @@ services:
     - frontend-network
     ports:
     - 127.0.0.1:8000:8000
+    environment:
+      TELEGRAM_BOT_SECRET: '4e7c5a90ab27bdbcd8c5011c9ea7bf793d6d1cbf3f0d16c4e69fa2091d895677'
+      TELEGRAM_NOTIFY_URL: http://telegram-bot:8787/notify
   frontend:
     build:
       context: ./frontend
