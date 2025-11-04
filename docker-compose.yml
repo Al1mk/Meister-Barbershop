@@ -7,10 +7,18 @@ services:
       MYSQL_USER: meister
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme_db_password}
     volumes:
-      - db_data:/var/lib/mysql
+    - db_data:/var/lib/mysql
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-changeme_root_password}"]
+      test:
+      - CMD
+      - mysqladmin
+      - ping
+      - -h
+      - localhost
+      - -u
+      - root
+      - -p${MYSQL_ROOT_PASSWORD:-changeme_root_password}
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,16 +30,18 @@ services:
         reservations:
           memory: 512M
     networks:
-      - backend-network
-
+    - backend-network
   redis:
     image: redis:7-alpine
     restart: unless-stopped
     volumes:
-      - redis_data:/data
+    - redis_data:/data
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,18 +51,15 @@ services:
           cpus: '0.5'
           memory: 512M
     networks:
-      - backend-network
-
+    - backend-network
   backend:
     build:
       context: ./backend
     image: ghcr.io/al1mk/meister-backend:latest
     env_file:
-      - backend/.env
+    - backend/.env
     volumes:
-      - media_data:/app/media
-    ports:
-      - "127.0.0.1:8000:8000"
+    - media_data:/app/media
     restart: unless-stopped
     depends_on:
       db:
@@ -60,7 +67,11 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:8000/health/
       interval: 30s
       timeout: 10s
       retries: 3
@@ -72,10 +83,13 @@ services:
           memory: 1G
         reservations:
           memory: 512M
+    extra_hosts:
+    - host.docker.internal:host-gateway
     networks:
-      - backend-network
-      - frontend-network
-
+    - backend-network
+    - frontend-network
+    ports:
+    - 127.0.0.1:8000:8000
   frontend:
     build:
       context: ./frontend
@@ -83,10 +97,14 @@ services:
         VITE_API_BASE: ${VITE_API_BASE:-/api}
     image: ghcr.io/al1mk/meister-frontend:latest
     ports:
-      - "127.0.0.1:5173:80"
+    - 127.0.0.1:5173:80
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:80/
       interval: 30s
       timeout: 5s
       retries: 3
@@ -98,8 +116,7 @@ services:
         reservations:
           memory: 256M
     networks:
-      - frontend-network
-
+    - frontend-network
   reverse-proxy:
     build:
       context: ./deploy/reverse-proxy
@@ -110,15 +127,19 @@ services:
       frontend:
         condition: service_healthy
     ports:
-      - "80:80"
-      - "443:443"
+    - 80:80
+    - 443:443
     volumes:
-      - ./deploy/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - nginx_cache:/var/cache/nginx
+    - ./deploy/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    - /etc/letsencrypt:/etc/letsencrypt:ro
+    - nginx_cache:/var/cache/nginx
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/healthz"]
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost/healthz
       interval: 30s
       timeout: 5s
       retries: 3
@@ -128,32 +149,29 @@ services:
           cpus: '0.5'
           memory: 512M
     networks:
-      - frontend-network
-
+    - frontend-network
   watchtower:
     image: containrrr/watchtower
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+    - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=86400
-      - WATCHTOWER_INCLUDE_STOPPED=false
-      - WATCHTOWER_REVIVE_STOPPED=false
+    - WATCHTOWER_CLEANUP=true
+    - WATCHTOWER_POLL_INTERVAL=86400
+    - WATCHTOWER_INCLUDE_STOPPED=false
+    - WATCHTOWER_REVIVE_STOPPED=false
     restart: unless-stopped
     deploy:
       resources:
         limits:
           cpus: '0.25'
           memory: 256M
-
 networks:
   backend-network:
     driver: bridge
   frontend-network:
     driver: bridge
-
 volumes:
-  media_data:
-  db_data:
-  redis_data:
-  nginx_cache:
+  media_data: null
+  db_data: null
+  redis_data: null
+  nginx_cache: null
