@@ -75,7 +75,7 @@ export default function Contact() {
           loading="lazy"
           allowFullScreen
           referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=49.5963491,11.0069307&output=embed"
+          src="https://www.google.com/maps?q=49.595217,11.0048712&hl=de&z=18&output=embed"
         />
       </div>
     </div>
