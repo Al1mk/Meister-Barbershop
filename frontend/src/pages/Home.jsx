@@ -211,7 +211,7 @@ export default function Home() {
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=49.595217,11.0048712&hl=de&z=18&output=embed"
+            src="https://www.google.com/maps?ll=49.595217,11.0048712&q=49.595217,11.0048712&z=19&hl=de&output=embed"
           />
           <button
             type="button"
