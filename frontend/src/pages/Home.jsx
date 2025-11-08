@@ -211,7 +211,7 @@ export default function Home() {
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=Deutschland,Erlangen,Hauptstr.+12&output=embed"
+            src="https://www.google.com/maps?q=Hauptstr.+12,+91054+Erlangen,+Germany&output=embed"
           />
           <button
             type="button"
