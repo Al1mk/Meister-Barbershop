@@ -77,3 +77,4 @@ The reverse proxy listens on port 80, serves the built frontend at `/`, and prox
 
 ## Continuous Integration & Delivery
 The GitHub Actions workflow (`.github/workflows/deploy.yml`) runs quality gates, builds both images, publishes them to GHCR with tags `latest` and the Git SHA, and can optionally redeploy via SSH on push to `main`. Configure required secrets in the repository settings (see workflow file for details).
+# Force rebuild graph 2025-11-08T19:09:38Z
