@@ -75,7 +75,7 @@ export default function Contact() {
           loading="lazy"
           allowFullScreen
           referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Deutschland,Erlangen,Hauptstr.+12&output=embed"
+          src="https://www.google.com/maps?q=49.5963491,11.0069307&output=embed"
         />
       </div>
     </div>
