@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import ReviewsCarousel from "../components/ReviewsCarousel.jsx";
 
 const DEFAULT_DESTINATION = {
-  lat: "49.597223",
-  lng: "11.004333",
+  lat: "49.5952204",
+  lng: "11.0022963",
 };
 
 const getDestinationParam = () => {
