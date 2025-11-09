@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import ReviewsCarousel from "../components/ReviewsCarousel.jsx";
 
 const DEFAULT_DESTINATION = {
-  lat: "49.5952204",
-  lng: "11.0022963",
+  lat: "49.595217",
+  lng: "11.0048712",
 };
 
 const getDestinationParam = () => {
@@ -211,7 +211,7 @@ export default function Home() {
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?ll=49.5952204,11.0022963&q=49.5952204,11.0022963&z=19&hl=de&output=embed"
+            src="https://www.google.com/maps?ll=49.595217,11.0048712&q=49.595217,11.0048712&z=19&hl=de&output=embed"
           />
           <button
             type="button"
