@@ -7,12 +7,17 @@ from django.views.static import serve as static_serve
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from bookings.unsubscribe_views import unsubscribe_followup
+from bookings.webhook_views import mailgun_webhook, sendgrid_webhook
+from bookings.metrics_views import email_metrics
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/api/docs/", permanent=False)),
     path("health/", lambda request: JsonResponse({"status": "ok"})),
+    path("health/email-metrics/", email_metrics, name="email_metrics"),
     path("admin/", admin.site.urls),
     path("unsubscribe-followup/", unsubscribe_followup, name="unsubscribe_followup"),
+    path("email-webhook/mailgun/", mailgun_webhook, name="mailgun_webhook"),
+    path("email-webhook/sendgrid/", sendgrid_webhook, name="sendgrid_webhook"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
     path("api/barbers/", include("barbers.urls")),

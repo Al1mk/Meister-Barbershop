@@ -220,30 +220,44 @@ class Notification(models.Model):
 class FollowUpRequest(models.Model):
     """
     Tracks follow-up review request emails sent to customers.
-    Ensures each email address receives at most one follow-up request.
-    Supports opt-out functionality via unsubscribe link.
+    ONE follow-up per appointment (unique constraint on appointment_id).
+    60-day cooldown per email address (configurable via FOLLOWUP_EMAIL_COOLDOWN_DAYS).
+    Supports opt-out functionality via unsubscribe link with GDPR compliance.
     """
-    email = models.EmailField(unique=True, db_index=True)
+    email = models.EmailField(db_index=True)  # Removed unique=True to allow multiple per email
     phone = models.CharField(max_length=32, blank=True, null=True)
-    appointment = models.ForeignKey(
+    appointment = models.OneToOneField(
         Appointment,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="followup_requests"
+        related_name="followup_request",
+        unique=True  # ONE follow-up per appointment
     )
     sent_at = models.DateTimeField(auto_now_add=True)
     lang = models.CharField(max_length=5, blank=True, null=True, help_text="Preferred language (de/en)")
+
+    # GDPR & opt-out tracking
     opt_out = models.BooleanField(default=False, help_text="Customer opted out of follow-up emails")
     opted_out_at = models.DateTimeField(null=True, blank=True)
+    opted_out_ip = models.GenericIPAddressField(null=True, blank=True, help_text="IP address of opt-out action")
+
+    # Webhook event tracking
+    bounce_type = models.CharField(max_length=50, blank=True, null=True, help_text="Bounce type (hard/soft)")
+    complaint = models.BooleanField(default=False, help_text="Spam complaint received")
+    webhook_event_data = models.JSONField(null=True, blank=True, help_text="Raw webhook event data")
 
     class Meta:
         indexes = [
             models.Index(fields=['email']),
             models.Index(fields=['opt_out']),
+            models.Index(fields=['sent_at']),
         ]
         ordering = ['-sent_at']
+        verbose_name = "Follow-up Request"
+        verbose_name_plural = "Follow-up Requests"
 
     def __str__(self) -> str:
         status = "opted-out" if self.opt_out else "active"
-        return f"{self.email} ({status}) - {self.sent_at.strftime('%Y-%m-%d')}"
+        appt_id = f"Appt#{self.appointment_id}" if self.appointment_id else "no-appt"
+        return f"{self.email} ({status}) - {appt_id} - {self.sent_at.strftime('%Y-%m-%d')}"

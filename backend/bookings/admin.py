@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Customer, Appointment, Notification
+from .models import Customer, Appointment, Notification, FollowUpRequest
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
@@ -17,3 +17,24 @@ class AppointmentAdmin(admin.ModelAdmin):
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ("id","appointment","type","channel","status","sent_at")
     list_filter = ("type","channel","status")
+
+@admin.register(FollowUpRequest)
+class FollowUpRequestAdmin(admin.ModelAdmin):
+    list_display = ("id", "email", "appointment_id", "sent_at", "opt_out", "bounce_type", "complaint")
+    list_filter = ("opt_out", "bounce_type", "complaint", "lang")
+    search_fields = ("email", "phone")
+    readonly_fields = ("sent_at", "opted_out_at", "opted_out_ip", "webhook_event_data")
+    list_per_page = 50
+
+    fieldsets = (
+        ("Email Information", {
+            "fields": ("email", "phone", "appointment", "lang")
+        }),
+        ("Status", {
+            "fields": ("opt_out", "opted_out_at", "opted_out_ip", "sent_at")
+        }),
+        ("Bounce & Complaint Tracking", {
+            "fields": ("bounce_type", "complaint", "webhook_event_data"),
+            "classes": ("collapse",)
+        }),
+    )

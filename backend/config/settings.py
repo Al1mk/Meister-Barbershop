@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
+    "anymail",
     "barbers",
     "bookings.apps.BookingsConfig",
     "contact",
@@ -100,20 +101,47 @@ CORS_ALLOW_ALL_ORIGINS = False if ALLOWED_ORIGINS else True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Email Configuration (Gmail SMTP)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'meister.barbershop.erlangen@gmail.com')
-EMAIL_HOST_PASSWORD = os.getenv('GMAIL_APP_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'meister.barbershop.erlangen@gmail.com')
+# Email Configuration (Transactional Provider with DKIM or Gmail SMTP fallback)
+EMAIL_PROVIDER = os.getenv('EMAIL_PROVIDER', '').lower()  # mailgun, sendgrid, or empty for Gmail
+
+if EMAIL_PROVIDER == 'mailgun':
+    EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+    ANYMAIL = {
+        'MAILGUN_API_KEY': os.getenv('EMAIL_API_KEY', ''),
+        'MAILGUN_SENDER_DOMAIN': os.getenv('EMAIL_DOMAIN', 'meisterbarbershop.de'),
+        'MAILGUN_API_URL': os.getenv('MAILGUN_API_URL', 'https://api.eu.mailgun.net/v3'),  # EU region
+    }
+elif EMAIL_PROVIDER == 'sendgrid':
+    EMAIL_BACKEND = 'anymail.backends.sendgrid.EmailBackend'
+    ANYMAIL = {
+        'SENDGRID_API_KEY': os.getenv('EMAIL_API_KEY', ''),
+    }
+else:
+    # Fallback to Gmail SMTP
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+    EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+    EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'meister.barbershop.erlangen@gmail.com')
+    EMAIL_HOST_PASSWORD = os.getenv('GMAIL_APP_PASSWORD', os.getenv('EMAIL_HOST_PASSWORD', ''))
+
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_FROM', os.getenv('DEFAULT_FROM_EMAIL', 'Meister Barbershop <no-reply@meisterbarbershop.de>'))
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Google Reviews Configuration
 GOOGLE_PLACE_ID = os.getenv('GOOGLE_PLACE_ID', 'ChIJRWUULEz5oUcRhfnp-cp0dXs')
 
 # Site Configuration
 SITE_URL = os.getenv('SITE_URL', 'https://www.meisterbarbershop.de')
+SITE_IMPRINT_URL = os.getenv('SITE_IMPRINT_URL', f'{SITE_URL}/impressum')
+SITE_PRIVACY_URL = os.getenv('SITE_PRIVACY_URL', f'{SITE_URL}/datenschutz')
+
+# Email System Configuration
+FOLLOWUP_EMAIL_COOLDOWN_DAYS = int(os.getenv('FOLLOWUP_EMAIL_COOLDOWN_DAYS', '60'))
+
+# Telegram Alerts Configuration
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', '')
 
 # Twilio SMS Configuration
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', '')
