@@ -1,0 +1,22 @@
+MEISTER BARBERSHOP
+Share Your Experience
+
+Dear {{ customer_name }},
+
+Thank you for choosing Meister Barbershop for your appointment with {{ barber_name }}!
+
+We hope you're happy with your new look. Your feedback helps us continue to provide excellent service to all our customers.
+
+LEAVE A REVIEW:
+{{ review_link }}
+
+Your review means the world to us and helps others discover our services.
+
+Thank you for your support!
+
+Best regards,
+The Meister Barbershop Team
+
+---
+Meister Barbershop | Hauptstrasse 12, 91054 Erlangen
+© 2025 Meister Barbershop. All rights reserved.

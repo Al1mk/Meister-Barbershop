@@ -1,0 +1,20 @@
+MEISTER BARBERSHOP
+Thank You for Contacting Us
+
+Dear {{ name }},
+
+We've received your message and will get back to you as soon as possible.
+
+Our team typically responds within 24 hours during business hours.
+
+NEED IMMEDIATE ASSISTANCE?
+Feel free to visit us at:
+Hauptstrasse 12
+91054 Erlangen, Germany
+
+Best regards,
+The Meister Barbershop Team
+
+---
+Meister Barbershop | Hauptstrasse 12, 91054 Erlangen
+© 2025 Meister Barbershop. All rights reserved.

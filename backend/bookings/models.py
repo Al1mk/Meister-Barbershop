@@ -92,6 +92,10 @@ class Appointment(models.Model):
     review_requested = models.BooleanField(default=False)
     review_request_sent_at = models.DateTimeField(null=True, blank=True)
 
+    # Follow-up email tracking (2-hour post-appointment review request)
+    followup_sent = models.BooleanField(default=False)
+    followup_sent_at = models.DateTimeField(null=True, blank=True)
+
     class Meta:
         unique_together = ("barber", "start_at")
 

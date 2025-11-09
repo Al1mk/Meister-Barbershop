@@ -1,0 +1,11 @@
+NEW CONTACT FORM MESSAGE
+
+From: {{ name }}
+Email: {{ email }}
+Phone: {{ phone }}
+Received: {{ created_at }}
+ID: #{{ contact_id }}
+
+MESSAGE:
+--------
+{{ message }}

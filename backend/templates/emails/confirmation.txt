@@ -1,0 +1,26 @@
+MEISTER BARBERSHOP
+Appointment Confirmation
+
+Dear {{ customer_name }},
+
+Your appointment at Meister Barbershop has been successfully confirmed.
+
+APPOINTMENT DETAILS:
+--------------------
+Barber: {{ barber_name }}
+Date: {{ appointment_date }}
+Time: {{ appointment_time }}
+Service: {{ service_type }}
+Duration: {{ duration }} minutes
+
+Location:
+Hauptstrasse 12
+91054 Erlangen, Germany
+
+We look forward to seeing you!
+
+If you need to reschedule or cancel, please contact us as soon as possible.
+
+---
+Meister Barbershop | Hauptstrasse 12, 91054 Erlangen
+© 2025 Meister Barbershop. All rights reserved.
