@@ -1,0 +1,58 @@
+MEISTER BARBERSHOP
+Terminbestätigung / Appointment Confirmation
+
+═══════════════════════════════════════
+DEUTSCH
+═══════════════════════════════════════
+
+Termin bestätigt!
+
+Lieber {{ customer_name }},
+
+Ihr Termin bei Meister Barbershop wurde erfolgreich bestätigt.
+
+TERMINDETAILS:
+--------------------
+Friseur: {{ barber_name }}
+Datum: {{ appointment_date }}
+Uhrzeit: {{ appointment_time }}
+Service: {{ service_type }}
+Dauer: {{ duration }} Minuten
+
+Standort:
+Hauptstrasse 12
+91054 Erlangen, Deutschland
+
+Wir freuen uns auf Ihren Besuch!
+
+Falls Sie Ihren Termin verschieben oder stornieren müssen, kontaktieren Sie uns bitte so bald wie möglich.
+
+═══════════════════════════════════════
+ENGLISH
+═══════════════════════════════════════
+
+Appointment Confirmed!
+
+Dear {{ customer_name }},
+
+Your appointment at Meister Barbershop has been successfully confirmed.
+
+APPOINTMENT DETAILS:
+--------------------
+Barber: {{ barber_name }}
+Date: {{ appointment_date }}
+Time: {{ appointment_time }}
+Service: {{ service_type }}
+Duration: {{ duration }} minutes
+
+Location:
+Hauptstrasse 12
+91054 Erlangen, Germany
+
+We look forward to seeing you!
+
+If you need to reschedule or cancel, please contact us as soon as possible.
+
+---
+Meister Barbershop | Hauptstrasse 12, 91054 Erlangen
+© 2025 Meister Barbershop. All rights reserved.

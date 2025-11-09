@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erfolgreich abgemeldet / Successfully Unsubscribed</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .header { background-color: #5cb85c; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+        .content { background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 5px 5px; }
+        .section { margin: 30px 0; }
+        .divider { border-top: 2px solid #ddd; margin: 30px 0; }
+        .lang-label { display: inline-block; background: #5cb85c; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; margin-bottom: 10px; }
+        h1 { margin: 0; }
+        h2 { color: #5cb85c; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✓ Meister Barbershop</h1>
+    </div>
+    <div class="content">
+        <!-- German Section -->
+        <div class="section">
+            <span class="lang-label">DEUTSCH</span>
+            <h2>Erfolgreich abgemeldet</h2>
+            <p>Sie wurden erfolgreich von unseren Follow-up-E-Mails abgemeldet.</p>
+            <p><strong>E-Mail:</strong> {{ email }}</p>
+            <p>Sie erhalten keine Bewertungsanfragen mehr von uns. Wir bedauern, dass Sie gehen, und hoffen, Sie bald wieder in unserem Salon begrüßen zu dürfen!</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- English Section -->
+        <div class="section">
+            <span class="lang-label">ENGLISH</span>
+            <h2>Successfully Unsubscribed</h2>
+            <p>You have been successfully unsubscribed from our follow-up emails.</p>
+            <p><strong>Email:</strong> {{ email }}</p>
+            <p>You will no longer receive review requests from us. We're sorry to see you go and hope to welcome you back to our salon soon!</p>
+        </div>
+    </div>
+</body>
+</html>

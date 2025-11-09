@@ -1,0 +1,53 @@
+MEISTER BARBERSHOP
+Ihre Meinung zählt / Your Feedback Matters
+
+═══════════════════════════════════════
+DEUTSCH
+═══════════════════════════════════════
+
+Wie war Ihre Erfahrung?
+
+Lieber {{ customer_name }},
+
+Vielen Dank, dass Sie Meister Barbershop für Ihren Termin mit {{ barber_name }} gewählt haben!
+
+Wir hoffen, Sie sind mit Ihrem neuen Look zufrieden. Ihr Feedback hilft uns, allen unseren Kunden exzellenten Service zu bieten.
+
+GOOGLE-BEWERTUNG HINTERLASSEN:
+{{ review_link }}
+
+Ihre Bewertung bedeutet uns sehr viel und hilft anderen, unseren Service zu entdecken.
+
+Vielen Dank für Ihre Unterstützung!
+
+Mit freundlichen Grüßen,
+Ihr Meister Barbershop Team
+
+═══════════════════════════════════════
+ENGLISH
+═══════════════════════════════════════
+
+How was your experience?
+
+Dear {{ customer_name }},
+
+Thank you for choosing Meister Barbershop for your appointment with {{ barber_name }}!
+
+We hope you're happy with your new look. Your feedback helps us continue to provide excellent service to all our customers.
+
+LEAVE A GOOGLE REVIEW:
+{{ review_link }}
+
+Your review means the world to us and helps others discover our services.
+
+Thank you for your support!
+
+Best regards,
+The Meister Barbershop Team
+
+---
+Meister Barbershop | Hauptstrasse 12, 91054 Erlangen
+© 2025 Meister Barbershop
+
+Sie möchten keine weiteren Follow-up-E-Mails erhalten? / Don't want to receive follow-up emails?
+Hier abmelden / Unsubscribe: {{ unsubscribe_link }}

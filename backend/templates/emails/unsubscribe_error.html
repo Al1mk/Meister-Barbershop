@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fehler / Error - Meister Barbershop</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .header { background-color: #d9534f; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+        .content { background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 5px 5px; }
+        .section { margin: 30px 0; }
+        .divider { border-top: 2px solid #ddd; margin: 30px 0; }
+        .lang-label { display: inline-block; background: #d9534f; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; margin-bottom: 10px; }
+        h1 { margin: 0; }
+        h2 { color: #d9534f; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✗ Meister Barbershop</h1>
+    </div>
+    <div class="content">
+        <!-- German Section -->
+        <div class="section">
+            <span class="lang-label">DEUTSCH</span>
+            <h2>Fehler beim Abmelden</h2>
+            <p>{{ error_de }}</p>
+            <p>Falls das Problem weiterhin besteht, kontaktieren Sie uns bitte direkt unter meister.barbershop.erlangen@gmail.com</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- English Section -->
+        <div class="section">
+            <span class="lang-label">ENGLISH</span>
+            <h2>Unsubscribe Error</h2>
+            <p>{{ error_en }}</p>
+            <p>If the problem persists, please contact us directly at meister.barbershop.erlangen@gmail.com</p>
+        </div>
+    </div>
+</body>
+</html>

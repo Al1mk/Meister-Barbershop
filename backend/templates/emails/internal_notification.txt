@@ -1,0 +1,14 @@
+NEUER TERMIN / NEW APPOINTMENT NOTIFICATION
+
+Kunde / Customer: {{ customer_name }}
+E-Mail: {{ customer_email }}
+Telefon / Phone: {{ customer_phone }}
+
+TERMINDETAILS / APPOINTMENT DETAILS:
+------------------------------------
+Friseur / Barber: {{ barber_name }}
+Datum / Date: {{ appointment_date }}
+Uhrzeit / Time: {{ appointment_time }}
+Service: {{ service_type }}
+Dauer / Duration: {{ duration }} Minuten / minutes
+ID: #{{ appointment_id }}

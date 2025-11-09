@@ -6,10 +6,13 @@ from django.views.generic import RedirectView
 from django.views.static import serve as static_serve
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+from bookings.unsubscribe_views import unsubscribe_followup
+
 urlpatterns = [
     path("", RedirectView.as_view(url="/api/docs/", permanent=False)),
     path("health/", lambda request: JsonResponse({"status": "ok"})),
     path("admin/", admin.site.urls),
+    path("unsubscribe-followup/", unsubscribe_followup, name="unsubscribe_followup"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
     path("api/barbers/", include("barbers.urls")),

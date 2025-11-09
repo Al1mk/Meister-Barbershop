@@ -215,3 +215,35 @@ class Notification(models.Model):
 
     class Meta:
         unique_together = ("appointment", "type", "channel")
+
+
+class FollowUpRequest(models.Model):
+    """
+    Tracks follow-up review request emails sent to customers.
+    Ensures each email address receives at most one follow-up request.
+    Supports opt-out functionality via unsubscribe link.
+    """
+    email = models.EmailField(unique=True, db_index=True)
+    phone = models.CharField(max_length=32, blank=True, null=True)
+    appointment = models.ForeignKey(
+        Appointment,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="followup_requests"
+    )
+    sent_at = models.DateTimeField(auto_now_add=True)
+    lang = models.CharField(max_length=5, blank=True, null=True, help_text="Preferred language (de/en)")
+    opt_out = models.BooleanField(default=False, help_text="Customer opted out of follow-up emails")
+    opted_out_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['email']),
+            models.Index(fields=['opt_out']),
+        ]
+        ordering = ['-sent_at']
+
+    def __str__(self) -> str:
+        status = "opted-out" if self.opt_out else "active"
+        return f"{self.email} ({status}) - {self.sent_at.strftime('%Y-%m-%d')}"

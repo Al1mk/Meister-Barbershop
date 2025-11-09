@@ -137,10 +137,10 @@ def on_appointment_saved(sender, instance, created, **kwargs):
             "appointment_id": instance.pk,
         }
 
-        # Send confirmation to customer
+        # Send confirmation to customer (bilingual)
         customer_sent = send_email_with_template(
-            subject=f"Appointment Confirmation - Meister Barbershop",
-            template_name="confirmation",
+            subject="Terminbestätigung / Appointment Confirmation - Meister Barbershop",
+            template_name="appointment_confirmation",
             context=context,
             to_emails=[instance.customer.email],
         )
@@ -150,7 +150,7 @@ def on_appointment_saved(sender, instance, created, **kwargs):
                 confirmation_sent_at=timezone.now()
             )
 
-        # Send internal notification
+        # Send internal notification (bilingual)
         internal_context = {
             **context,
             "customer_phone": instance.customer.phone,
@@ -158,8 +158,8 @@ def on_appointment_saved(sender, instance, created, **kwargs):
         }
 
         send_email_with_template(
-            subject=f"New Appointment: {instance.customer.name} with {instance.barber.name}",
-            template_name="internal_appointment",
+            subject=f"Neuer Termin / New Appointment: {instance.customer.name} with {instance.barber.name}",
+            template_name="internal_notification",
             context=internal_context,
             to_emails=[INTERNAL_EMAIL],
         )

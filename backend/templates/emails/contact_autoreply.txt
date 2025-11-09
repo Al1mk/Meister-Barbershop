@@ -1,5 +1,31 @@
 MEISTER BARBERSHOP
-Thank You for Contacting Us
+Vielen Dank / Thank You
+
+═══════════════════════════════════════
+DEUTSCH
+═══════════════════════════════════════
+
+Vielen Dank für Ihre Nachricht!
+
+Lieber {{ name }},
+
+Wir haben Ihre Nachricht erhalten und werden uns schnellstmöglich bei Ihnen melden.
+
+Unser Team antwortet normalerweise innerhalb von 24 Stunden während der Geschäftszeiten.
+
+BENÖTIGEN SIE SOFORTIGE HILFE?
+Besuchen Sie uns gerne direkt:
+Hauptstrasse 12
+91054 Erlangen, Deutschland
+
+Mit freundlichen Grüßen,
+Ihr Meister Barbershop Team
+
+═══════════════════════════════════════
+ENGLISH
+═══════════════════════════════════════
+
+Thank You for Contacting Us!
 
 Dear {{ name }},
 
@@ -17,4 +43,4 @@ The Meister Barbershop Team
 
 ---
 Meister Barbershop | Hauptstrasse 12, 91054 Erlangen
-© 2025 Meister Barbershop. All rights reserved.
+© 2025 Meister Barbershop
