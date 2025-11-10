@@ -64,6 +64,9 @@
       "empty": "Reviews will appear here once available.",
       "prev": "Previous reviews",
       "next": "Next reviews"
+    },
+    "team": {
+      "title": "Our Team"
     }
   },
   "booking": {

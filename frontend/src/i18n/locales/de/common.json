@@ -64,6 +64,9 @@
       "empty": "Sobald Bewertungen verfügbar sind, erscheinen sie hier.",
       "prev": "Vorherige Bewertungen",
       "next": "Nächste Bewertungen"
+    },
+    "team": {
+      "title": "Unser Team"
     }
   },
   "booking": {
