@@ -1,0 +1,21 @@
+Termin bestätigt – Meister Barbershop
+
+Lieber {{ customer_name }},
+
+vielen Dank für Ihre Buchung! Ihr Termin bei Meister Barbershop wurde erfolgreich bestätigt.
+
+TERMINDETAILS:
+📅 Datum: {{ appointment_date }}
+🕐 Uhrzeit: {{ appointment_time }}
+✂️ Service: {{ service_type }}
+👤 Barber: {{ barber_name }}
+
+Bitte erscheinen Sie pünktlich zu Ihrem Termin. Falls Sie den Termin nicht wahrnehmen können, sagen Sie bitte rechtzeitig ab.
+
+Termin verwalten: https://www.meisterbarbershop.de
+
+---
+Meister Barbershop
+Luitpoldstraße 9, 91052 Erlangen
+Tel: +49 9131 9277740
+www.meisterbarbershop.de

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark only">
+<title>Termin bestätigt – Meister Barbershop</title>
+<style>
+  body { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; font-size:16px; line-height:1.6; color:#e0e0e0; background:#0f0f0f; }
+  .wrapper { width:100%; background:#0f0f0f; padding:24px 0; }
+  .card { max-width:640px; margin:0 auto; background:#121212; border:1px solid #c9a863; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.4); overflow:hidden; }
+  .hdr { background:#c9a863; color:#191919; padding:20px 28px; font-weight:700; font-size:28px; text-align:center; }
+  .body { padding:28px; color:#e0e0e0; }
+  .body p { margin:0 0 16px; }
+  .info-block { background:#1a1a1a; border-left:3px solid #c9a863; padding:16px; margin:20px 0; border-radius:6px; }
+  .info-block strong { color:#c9a863; display:block; margin-bottom:8px; }
+  .btn { display:inline-block; background:#c9a863; color:#121212 !important; text-decoration:none; padding:12px 20px; border-radius:10px; font-weight:600; margin:8px 0; }
+  .btn:hover { background:#d4b870; }
+  .footer { text-align:center; padding:20px 28px; font-size:14px; color:#888; border-top:1px solid #2a2a2a; }
+  .footer a { color:#c9a863; text-decoration:none; }
+  @media (max-width:640px) { .card { margin:0 12px; } .hdr { font-size:24px; padding:16px; } .body { padding:20px; } }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card">
+    <div class="hdr">Termin bestätigt</div>
+    <div class="body">
+      <p>Lieber {{ customer_name }},</p>
+      
+      <p>vielen Dank für Ihre Buchung! Ihr Termin bei <strong>Meister Barbershop</strong> wurde erfolgreich bestätigt.</p>
+
+      <div class="info-block">
+        <strong>Termindetails:</strong>
+        📅 Datum: {{ appointment_date }}<br>
+        🕐 Uhrzeit: {{ appointment_time }}<br>
+        ✂️ Service: {{ service_type }}<br>
+        👤 Barber: {{ barber_name }}
+      </div>
+
+      <p>Bitte erscheinen Sie pünktlich zu Ihrem Termin. Falls Sie den Termin nicht wahrnehmen können, sagen Sie bitte rechtzeitig ab.</p>
+
+      <p style="text-align:center; margin-top:24px;">
+        <a class="btn" href="https://www.meisterbarbershop.de">Termin verwalten</a>
+      </p>
+    </div>
+    <div class="footer">
+      <strong>Meister Barbershop</strong><br>
+      Luitpoldstraße 9, 91052 Erlangen<br>
+      Tel: <a href="tel:+4991319277740">+49 9131 9277740</a><br>
+      <a href="https://www.meisterbarbershop.de">www.meisterbarbershop.de</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

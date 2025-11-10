@@ -1,0 +1,20 @@
+Meister Barbershop – Bewertung
+
+Lieber Kunde,
+
+vielen Dank, dass Sie sich für Meister Barbershop entschieden haben!
+
+Wir würden uns sehr über Ihre Bewertung bei Google freuen:
+{{ review_url }}
+
+Wenn Sie keine weiteren E-Mails erhalten möchten:
+{{ unsubscribe_url }}
+
+Mit freundlichen Grüßen
+Ihr Meister Barbershop Team
+
+---
+Meister Barbershop
+Luitpoldstraße 9, 91052 Erlangen
+Tel: +49 9131 9277740
+www.meisterbarbershop.de

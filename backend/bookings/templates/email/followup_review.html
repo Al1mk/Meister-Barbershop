@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="dark only">
+<meta name="supported-color-schemes" content="dark">
+<title>Meister Barbershop – Bewertung</title>
+<style>
+  /* Inline-safe styles for email clients */
+  .wrapper { width:100%; background:#0f0f0f; padding:24px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; }
+  .card { max-width:640px; margin:0 auto; background:#121212; border:1px solid #c9a863; border-radius:16px; box-shadow:0 6px 24px rgba(0,0,0,.5); }
+  .hdr { background:#c9a863; color:#191919; padding:20px 28px; font-weight:700; font-size:28px; letter-spacing:.3px; }
+  .body { color:#e7e3dc; padding:28px; line-height:1.6; font-size:16px; }
+  .divider { height:1px; background:#2a2a2a; margin:20px 0; }
+  .btn { display:inline-block; background:#c9a863; color:#121212 !important; text-decoration:none; padding:12px 20px; border-radius:10px; font-weight:700; }
+  .muted { color:#b9b3a6; font-size:13px; }
+  a { color:#c9a863; }
+</style>
+</head>
+<body style="margin:0;background:#0f0f0f;">
+  <div class="wrapper">
+    <div class="card">
+      <div class="hdr">Meister Barbershop</div>
+      <div class="body">
+        <p>Lieber Kunde,</p>
+        <p>vielen Dank, dass Sie sich für <strong>Meister Barbershop</strong> entschieden haben! Wir hoffen, Sie sind mit Ihrem neuen Look zufrieden. Ihr Feedback hilft uns, unseren Service stetig zu verbessern.</p>
+
+        <p><strong>Hätten Sie 30&nbsp;Sekunden Zeit für eine kurze Bewertung?</strong></p>
+
+        <!-- REVIEW BUTTON (must be immediately after the request text) -->
+        <p style="margin:18px 0 8px;">
+          <a class="btn" href="{{ review_url }}" target="_blank" rel="noopener">Jetzt bei Google bewerten</a>
+        </p>
+        <p class="muted">Falls die Schaltfläche nicht funktioniert, nutzen Sie bitte diesen Link: <br>
+          <a href="{{ review_url }}" target="_blank">{{ review_url }}</a>
+        </p>
+
+        <div class="divider"></div>
+
+        <p class="muted">Falls Sie keine weiteren Erinnerungen erhalten möchten, können Sie sich hier abmelden:
+          <a href="{{ unsubscribe_url }}" target="_blank">Abmelden</a>
+        </p>
+
+        <p>Mit freundlichen Grüßen<br>
+        Ihr Meister Barbershop Team</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

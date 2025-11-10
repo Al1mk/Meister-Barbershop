@@ -23,6 +23,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.utils import timezone
+from bookings.email_helpers import build_review_url, unsubscribe_followup_url
 
 from bookings.models import Appointment, FollowUpRequest
 from bookings.utils.email_helpers import (
