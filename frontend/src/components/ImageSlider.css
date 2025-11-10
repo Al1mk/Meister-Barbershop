@@ -1,0 +1,56 @@
+.meister-card-wrapper {
+  position: relative;
+  width: min(78vw, 960px);
+  aspect-ratio: 16/10;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #0e0e0e;
+  box-shadow: 0 8px 50px rgba(0,0,0,.5), inset 0 0 0 2px rgba(201,161,95,.55);
+  isolation: isolate;
+}
+
+.slide-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: translateZ(0);
+  will-change: opacity, filter;
+}
+
+.is-top { z-index: 1; }
+.is-bottom { z-index: 0; }
+
+.fade-blur-in {
+  opacity: 1;
+  filter: blur(0px) brightness(1);
+  transition: opacity 1000ms ease, filter 1000ms ease;
+}
+
+.fade-blur-out {
+  opacity: 0;
+  filter: blur(6px) brightness(.9);
+  transition: opacity 1000ms ease, filter 1000ms ease;
+}
+
+.card-content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(transparent 60%, rgba(0,0,0,.35));
+}
+
+.brand-title {
+  color: #c9a15f;
+  letter-spacing: .06em;
+  font-weight: 500;
+  font-size: clamp(22px, 3.4vw, 34px);
+  text-align: center;
+  text-shadow: 0 1px 10px rgba(0,0,0,.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-blur-in, .fade-blur-out { transition: none; filter: none; }
+}

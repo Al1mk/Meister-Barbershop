@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ReviewsCarousel from "../components/ReviewsCarousel.jsx";
+import MeisterCard from "../components/MeisterCard.jsx";
 
 const DEFAULT_DESTINATION = {
   lat: "49.595217",
@@ -166,9 +167,7 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-visual" ref={heroVisualRef}>
-          <div className="card hero-card" style={{ height: 280, display: "grid", placeItems: "center", border: "1px solid var(--bronze)" }}>
-            <div style={{ textAlign: "center", color: "var(--bronze)" }}>MEISTER<br />BARBERSHOP</div>
-          </div>
+          <MeisterCard />
         </div>
       </div>
 
