@@ -30,11 +30,12 @@ export default function MapSection() {
         {/* Transparent full-overlay link so clicking the map opens Google Maps */}
         <a
           className="map-overlay-link"
-          href={gmapsPlaceUrl}
+          href="https://www.google.com/maps/place/Hauptstraße+12,+91054+Erlangen,+Germany/@49.5897,11.0089,18z"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Open in Google Maps"
-          title="Open in Google Maps"
+          aria-label={t('home.map.openInMaps', 'Open in Google Maps')}
+          tabIndex="0"
+          data-hint={t('home.map.hint', 'Open in Google Maps')}
         />
         <iframe
           className="map-iframe"
@@ -47,7 +48,7 @@ export default function MapSection() {
 
       <div className="map-cta-wrap">
         <a
-          className="map-cta-btn"
+          className="map-cta-btn map-cta"
           href={gmapsDirectionsUrl}
           target="_blank"
           rel="noopener noreferrer"

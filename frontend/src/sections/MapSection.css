@@ -47,3 +47,44 @@
 @media (max-width: 768px) {
   .map-iframe { height: 360px; }
 }
+
+/* --- Map polish: glow + hover hint + consistent transitions --- */
+.map-wrap {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45), 0 0 6px rgba(201,168,99,0.20);
+  position: relative;
+  isolation: isolate;
+}
+
+.map-cta {
+  transition: all 0.2s ease;
+  transform: translateY(0);
+}
+.map-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(201,168,99,0.18);
+}
+
+/* Hover hint */
+.map-overlay-link::after {
+  content: "Open in Google Maps";
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  padding: 4px 8px;
+  font-size: .85rem;
+  color: rgba(255,255,255,0.75);
+  background: rgba(15,15,15,0.55);
+  border: 1px solid rgba(201,168,99,0.28);
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+  z-index: 4;
+}
+.map-wrap:hover .map-overlay-link::after { opacity: 1; }
+
+.map-overlay-link[data-hint]:after { content: attr(data-hint); }
+
+@media (prefers-reduced-motion: reduce) {
+  .map-cta, .map-overlay-link::after { transition: none; }
+}

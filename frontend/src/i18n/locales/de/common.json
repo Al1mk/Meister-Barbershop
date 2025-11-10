@@ -70,7 +70,9 @@
     },
     "map": {
       "title": "Hauptstraße 12, 91054 Erlangen, Deutschland",
-      "cta": "Route planen"
+      "cta": "Route planen",
+      "openInMaps": "In Google Maps öffnen",
+      "hint": "In Google Maps öffnen"
     }
   },
   "booking": {

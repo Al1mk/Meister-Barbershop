@@ -70,7 +70,9 @@
     },
     "map": {
       "title": "Hauptstr. 12, 91054 Erlangen, Germany",
-      "cta": "Get directions"
+      "cta": "Get directions",
+      "openInMaps": "Open in Google Maps",
+      "hint": "Open in Google Maps"
     }
   },
   "booking": {
