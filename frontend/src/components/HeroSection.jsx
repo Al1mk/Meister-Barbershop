@@ -14,9 +14,9 @@ export default function HeroSection() {
 
       <div className="hero-image">
         <img
-          src="/images/salon-main.jpg"
+          src="/images/hero/main.jpg"
           alt="Meister Barbershop Interior"
-          loading="lazy"
+          loading="eager" fetchpriority="high"
         />
       </div>
 
