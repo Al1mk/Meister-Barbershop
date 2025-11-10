@@ -1,0 +1,36 @@
+.barber-card {
+  background-color: #0f0f0f;
+  border: 1px solid rgba(201,168,99,0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  color: #c9a863;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.barber-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px rgba(201,168,99,0.1);
+}
+.barber-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+.barber-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  display: inline-block;
+}
+.barber-role {
+  font-size: 0.85em;
+  color: #a8a8a8;
+  margin-left: 4px;
+  font-weight: 400;
+}
+.barber-service {
+  font-size: 0.95rem;
+  color: #c9a863;
+  opacity: 0.85;
+}
