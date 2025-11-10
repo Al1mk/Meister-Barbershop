@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ReviewsCarousel from "../components/ReviewsCarousel.jsx";
 import HeroSection from "../components/HeroSection.jsx";
+import TeamSection from "../sections/TeamSection.jsx";
 
 const DEFAULT_DESTINATION = {
   lat: "49.595217",
@@ -62,6 +63,8 @@ export default function Home() {
           </div>
         ))}
       </div>
+
+      <TeamSection />
 
       <div className="map-container" id="map">
         <h2 style={{ textAlign: "center", marginBottom: 24 }}>{t("home.map.title")}</h2>
