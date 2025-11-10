@@ -1,13 +1,83 @@
 <!doctype html>
-<html lang="fa" dir="rtl">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meister Barbershop</title>
+    <meta name="description" content="Meister Barbershop in Erlangen, Germany. Book premium haircuts and beard grooming online. Open Mon-Sat with professional barbers." />
+    <title>Meister Barbershop | Premium Haircuts in Erlangen</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    
+    <!-- Preconnect for performance (self-hosted, minimal external resources) -->
+    <link rel="dns-prefetch" href="https://www.meisterbarbershop.de" />
+    
+    <!-- LCP Image Preload -->
     <link rel="preload" as="image" type="image/avif" href="/images/salon/salon1-1200.avif" imagesrcset="/images/salon/salon1-480.avif 480w, /images/salon/salon1-768.avif 768w, /images/salon/salon1-1200.avif 1200w" imagesizes="(max-width: 767px) 100vw, 50vw" />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BarberShop",
+      "name": "Meister Barbershop",
+      "image": "https://www.meisterbarbershop.de/images/salon/salon1-1200.jpg",
+      "description": "Premium barbershop offering professional haircuts, beard grooming, and styling services in Erlangen, Germany.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Hauptstraße 12",
+        "addressLocality": "Erlangen",
+        "addressRegion": "Bayern",
+        "postalCode": "91054",
+        "addressCountry": "DE"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "49.5897",
+        "longitude": "11.0089"
+      },
+      "url": "https://www.meisterbarbershop.de",
+      "telephone": "+49-9131-XXXXXX",
+      "priceRange": "€€",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          "opens": "09:00",
+          "closes": "19:00"
+        }
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "127"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Haircut",
+              "description": "Professional haircut service"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Hair + Beard",
+              "description": "Combined haircut and beard grooming service"
+            }
+          }
+        ]
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

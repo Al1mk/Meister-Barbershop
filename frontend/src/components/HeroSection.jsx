@@ -7,9 +7,9 @@ export default function HeroSection() {
   
   const images = useMemo(
     () => [
-      { base: "salon1", alt: "Meister Barbershop Interior - View 1" },
-      { base: "salon2", alt: "Meister Barbershop Interior - View 2" },
-      { base: "salon3", alt: "Meister Barbershop Interior - View 3" },
+      { base: "salon1", alt: "Meister Barbershop Interior 1" },
+      { base: "salon2", alt: "Meister Barbershop Interior 2" },
+      { base: "salon3", alt: "Meister Barbershop Interior 3" },
     ],
     []
   );
