@@ -67,6 +67,10 @@
     },
     "team": {
       "title": "Our Team"
+    },
+    "map": {
+      "title": "Hauptstr. 12, 91054 Erlangen, Germany",
+      "cta": "Get directions"
     }
   },
   "booking": {

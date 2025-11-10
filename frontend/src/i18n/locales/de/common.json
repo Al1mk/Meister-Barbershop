@@ -67,6 +67,10 @@
     },
     "team": {
       "title": "Unser Team"
+    },
+    "map": {
+      "title": "Hauptstraße 12, 91054 Erlangen, Deutschland",
+      "cta": "Route planen"
     }
   },
   "booking": {

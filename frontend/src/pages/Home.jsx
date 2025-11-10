@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import ReviewsCarousel from "../components/ReviewsCarousel.jsx";
 import HeroSection from "../components/HeroSection.jsx";
 import TeamSection from "../sections/TeamSection.jsx";
+import MapSection from "../sections/MapSection.jsx";
 
 const DEFAULT_DESTINATION = {
   lat: "49.595217",
@@ -28,11 +29,6 @@ export default function Home() {
   const features = useMemo(() => ["quality", "speed", "hygiene"], []);
   const featureRefs = useRef([]);
   const offerRef = useRef(null);
-  const [directionsUrl, setDirectionsUrl] = useState(() => {
-    const destination = getDestinationParam();
-    const travelMode = "travelmode=driving";
-    return "https://www.google.com/maps/dir/?api=1&" + destination + "&" + travelMode;
-  });
 
   return (
     <div className="container">
@@ -66,22 +62,7 @@ export default function Home() {
 
       <TeamSection />
 
-      <div className="map-container" id="map">
-        <h2 style={{ textAlign: "center", marginBottom: 24 }}>{t("home.map.title")}</h2>
-        <iframe
-          title={t("home.map.title")}
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d647.9456318!2d11.0022963!3d49.5952204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a1501441d61667%3A0x32aba2711ff76f1e!2sMeister%20Barbershop!5e0!3m2!1sen!2sde!4v1234567890"
-          width="100%"
-          height="450"
-          style={{ border: 0, borderRadius: 12 }}
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
-        <div style={{ textAlign: "center", marginTop: 16 }}>
-          <a href={directionsUrl} target="_blank" rel="noopener noreferrer" className="btn">{t("home.map.cta")}</a>
-        </div>
-      </div>
+      <MapSection />
     </div>
   );
 }
