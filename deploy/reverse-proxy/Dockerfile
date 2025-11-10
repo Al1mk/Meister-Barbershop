@@ -9,6 +9,7 @@ RUN apk add --no-cache curl openssl
 COPY validate-config.sh /usr/local/bin/validate-config.sh
 COPY entrypoint.sh /usr/local/bin/entrypoint-wrapper.sh
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY includes/ /etc/nginx/includes/
 
 # Make scripts executable
 RUN chmod +x /usr/local/bin/validate-config.sh /usr/local/bin/entrypoint-wrapper.sh
