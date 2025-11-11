@@ -21,9 +21,9 @@ const BARBER_DETAILS = {
     availabilityKey: "booking.barbers.details.ali.availability",
     languages: ["Deutsch", "English"],
   },
-  alishaun: {
-    taglineKey: "booking.barbers.details.alishaun.tagline",
-    availabilityKey: "booking.barbers.details.alishaun.availability",
+  alishan: {
+    taglineKey: "booking.barbers.details.alishan.tagline",
+    availabilityKey: "booking.barbers.details.alishan.availability",
     languages: ["Deutsch", "English"],
   },
 };

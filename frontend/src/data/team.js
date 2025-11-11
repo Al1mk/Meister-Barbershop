@@ -34,9 +34,9 @@ export const teamMembers = [
   },
   {
     id: 5,
-    name: "Alishaun",
-    slug: "alishaun",
-    image: "/images/barbers/alishaun.jpg",
+    name: "Alishan",
+    slug: "alishan",
+    image: "/images/barbers/alishan.jpg",
     languages: ["Deutsch", "English"],
   },
 ];
