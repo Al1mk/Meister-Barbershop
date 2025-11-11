@@ -468,6 +468,7 @@ export default function Booking() {
               selected={barberId === b.id}
               onSelect={() => setBarberId(b.id)}
               onBook={() => setStep(2)}
+              isBookingMode={true}
             />
           ))}
         </div>

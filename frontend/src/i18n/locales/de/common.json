@@ -12,6 +12,10 @@
       "de": "Deutsch"
     }
   },
+  "languages": {
+    "deutsch": "Deutsch",
+    "english": "Englisch"
+  },
   "footer": {
     "address": "Deutschland, Erlangen, Hauptstraße 12 — Meister Barbershop",
     "open": "Geöffnet Mo–Sa",
@@ -134,6 +138,8 @@
     "barbers": {
       "book": "Buchen",
       "bookLabel": "Termin mit {{name}} buchen",
+      "bookWithLabel": "Termin mit {{name}} buchen",
+      "languagesLabel": "Gesprochene Sprachen",
       "availabilityLabel": "Verfügbarkeit",
       "taglineLabel": "Schwerpunkt",
       "details": {
