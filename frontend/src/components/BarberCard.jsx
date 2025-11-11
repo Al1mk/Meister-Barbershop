@@ -17,7 +17,7 @@ function getInitials(name) {
 }
 
 /**
- * Generate responsive image sources for WebP and AVIF
+ * Generate responsive image sources for WebP
  */
 function getResponsiveImageSources(imagePath) {
   if (!imagePath) {return null;}
@@ -26,10 +26,6 @@ function getResponsiveImageSources(imagePath) {
   const basePath = imagePath.replace(/\.(jpg|jpeg|png)$/i, "");
 
   return {
-    avif: {
-      "1x": `${basePath}.avif`,
-      "2x": `${basePath}@2x.avif`,
-    },
     webp: {
       "1x": `${basePath}.webp`,
       "2x": `${basePath}@2x.webp`,
@@ -125,10 +121,6 @@ export default function BarberCard({ barber, selected, onSelect, onBook, isBooki
 
         {!showFallback && imageSources ? (
           <picture>
-            <source
-              type="image/avif"
-              srcSet={`${imageSources.avif["1x"]} 1x, ${imageSources.avif["2x"]} 2x`}
-            />
             <source
               type="image/webp"
               srcSet={`${imageSources.webp["1x"]} 1x, ${imageSources.webp["2x"]} 2x`}
