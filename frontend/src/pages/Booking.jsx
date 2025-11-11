@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { getBarbers, getSlots, createAppointment, getAvailability } from "../lib/api.js";
+import { team } from "../data/team.js";
 import BarberCard from "../components/BarberCard.jsx";
 import TimeSlotPicker from "../components/TimeSlotPicker.jsx";
 import CalendarPicker from "../components/CalendarPicker.jsx";
@@ -29,6 +30,16 @@ function normalizeBarber(barber) {
   const displayName = NAME_MAP[trimmedName] || trimmedName;
   const initial = displayName ? displayName.charAt(0).toUpperCase() : "";
   return { ...barber, name: trimmedName, displayName, displayInitial: initial };
+}
+
+function enrichBarberWithTeamData(barber) {
+  if (!barber || !barber.displayName) {return barber;}
+  const slug = barber.displayName.toLowerCase();
+  const teamMember = team.find(t => t.slug === slug);
+  if (teamMember) {
+    return { ...barber, image: teamMember.image, languages: teamMember.languages };
+  }
+  return barber;
 }
 
 function isoToUTCDate(value) {
@@ -194,7 +205,7 @@ export default function Booking() {
       try {
         const data = await getBarbers();
         if (!isActive) {return;}
-        const normalized = Array.isArray(data) ? data.map((item) => normalizeBarber(item)) : [];
+        const normalized = Array.isArray(data) ? data.map((item) => enrichBarberWithTeamData(normalizeBarber(item))) : [];
         setBarbers(normalized);
         setError("");
       } catch (err) {
