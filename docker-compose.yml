@@ -22,12 +22,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     deploy:
       resources:
         limits:
-          cpus: '1.5'
+          cpus: '0.6'
           memory: 1.5G
         reservations:
+          cpus: '0.3'
           memory: 512M
     networks:
     - backend-network
@@ -45,11 +51,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '0.2'
           memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 256M
     networks:
     - backend-network
   backend:
@@ -76,12 +90,18 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     deploy:
       resources:
         limits:
-          cpus: '1.0'
+          cpus: '0.6'
           memory: 1G
         reservations:
+          cpus: '0.3'
           memory: 512M
     extra_hosts:
     - host.docker.internal:host-gateway
@@ -111,12 +131,18 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '0.15'
           memory: 512M
         reservations:
+          cpus: '0.05'
           memory: 256M
     networks:
     - frontend-network
@@ -146,11 +172,19 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: '0.2'
           memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 256M
     networks:
     - frontend-network
   watchtower:
@@ -163,11 +197,19 @@ services:
     - WATCHTOWER_INCLUDE_STOPPED=false
     - WATCHTOWER_REVIVE_STOPPED=false
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
     deploy:
       resources:
         limits:
-          cpus: '0.25'
+          cpus: '0.1'
           memory: 256M
+        reservations:
+          cpus: '0.05'
+          memory: 128M
 networks:
   backend-network:
     driver: bridge

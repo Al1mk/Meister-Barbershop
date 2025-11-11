@@ -18,6 +18,19 @@ services:
       timeout: 3s
       retries: 3
       start_period: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.15'
+          memory: 256M
+        reservations:
+          cpus: '0.05'
+          memory: 64M
 
   backend:
     environment:
