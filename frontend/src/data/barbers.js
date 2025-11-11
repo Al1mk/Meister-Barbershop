@@ -4,34 +4,34 @@ const BARBER_DETAILS = {
   ehsan: {
     taglineKey: "booking.barbers.details.ehsan.tagline",
     availabilityKey: "booking.barbers.details.ehsan.availability",
-    languages: ["DE", "FA"],
+    languages: ["Deutsch"],
   },
   iman: {
     taglineKey: "booking.barbers.details.iman.tagline",
     availabilityKey: "booking.barbers.details.iman.availability",
-    languages: ["DE", "FA"],
+    languages: ["Deutsch"],
   },
   javad: {
     taglineKey: "booking.barbers.details.javad.tagline",
     availabilityKey: "booking.barbers.details.javad.availability",
-    languages: ["DE", "FA", "EN"],
+    languages: ["Deutsch"],
   },
   ali: {
     taglineKey: "booking.barbers.details.ali.tagline",
     availabilityKey: "booking.barbers.details.ali.availability",
-    languages: ["DE", "FA"],
+    languages: ["Deutsch", "English"],
   },
-  reza: {
-    taglineKey: "booking.barbers.details.reza.tagline",
-    availabilityKey: "booking.barbers.details.reza.availability",
-    languages: ["DE", "FA"],
+  alishaun: {
+    taglineKey: "booking.barbers.details.alishaun.tagline",
+    availabilityKey: "booking.barbers.details.alishaun.availability",
+    languages: ["Deutsch", "English"],
   },
 };
 
 const DEFAULT_DETAILS = {
   taglineKey: "booking.barbers.details.default.tagline",
   availabilityKey: "booking.barbers.details.default.availability",
-  languages: ["DE"],
+  languages: ["Deutsch"],
 };
 
 export function getBarberDetails(name) {

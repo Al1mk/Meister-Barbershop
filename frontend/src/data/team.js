@@ -1,32 +1,61 @@
-export const team = [
+/**
+ * Single source of truth for team member data
+ * Used by both Booking page and Our Team section
+ */
+
+export const teamMembers = [
   {
-    slug: "ehsan",
+    id: 1,
     name: "Ehsan",
+    slug: "ehsan",
     image: "/images/barbers/ehsan.jpg",
-    languages: ["Deutsch"]        // speaks German
+    languages: ["Deutsch"],
   },
   {
-    slug: "iman",
+    id: 2,
     name: "Iman",
+    slug: "iman",
     image: "/images/barbers/iman.jpg",
-    languages: ["Deutsch"]
+    languages: ["Deutsch"],
   },
   {
-    slug: "javad",
+    id: 3,
     name: "Javad",
+    slug: "javad",
     image: "/images/barbers/javad.jpg",
-    languages: ["Deutsch"]
+    languages: ["Deutsch"],
   },
   {
-    slug: "ali",
+    id: 4,
     name: "Ali",
+    slug: "ali",
     image: "/images/barbers/ali.jpg",
-    languages: ["Deutsch", "English"] // Ali also speaks English
+    languages: ["Deutsch", "English"],
   },
   {
-    slug: "alishaun",
+    id: 5,
     name: "Alishaun",
+    slug: "alishaun",
     image: "/images/barbers/alishaun.jpg",
-    languages: ["Deutsch", "English"] // New barber; speaks German & English
-  }
+    languages: ["Deutsch", "English"],
+  },
 ];
+
+// Export as 'team' for backwards compatibility with Booking page
+export const team = teamMembers;
+
+/**
+ * Get team member by name (case-insensitive)
+ */
+export function getTeamMemberByName(name) {
+  if (!name) {return null;}
+  const normalized = name.trim().toLowerCase();
+  return teamMembers.find(member => member.name.toLowerCase() === normalized) || null;
+}
+
+/**
+ * Get all active team members
+ */
+export function getActiveTeamMembers() {
+  return teamMembers;
+}

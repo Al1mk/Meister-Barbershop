@@ -13,14 +13,12 @@ const NAME_MAP = {
   "ایمان": "Iman",
   "علی": "Ali",
   "احسان": "Ehsan",
-  "رضا": "Reza",
 };
 
 const TIME_ZONE = "Europe/Berlin";
 const SERVICE_DURATION = { haircut: 30, hair_beard: 45 };
 const SERVICE_ORDER = ["haircut", "hair_beard"];
 const DEFAULT_SERVICE = "haircut";
-const REZA_MATCHES = new Set(["reza", "رضا"]);
 
 function normalizeBarber(barber) {
   if (!barber) {
@@ -116,12 +114,7 @@ function isSunday(dateStr) {
 }
 
 function allowedWeekdaysForBarber(barber) {
-  const raw = (barber?.name || "").trim();
-  const display = (barber?.displayName || raw || "").trim();
-  const normalized = display ? display.toLowerCase() : "";
-  if (REZA_MATCHES.has(normalized) || REZA_MATCHES.has(raw)) {
-    return new Set([5, 6]);
-  }
+  // All barbers work Monday to Saturday (1-6)
   return new Set([1, 2, 3, 4, 5, 6]);
 }
 
