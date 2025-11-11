@@ -467,7 +467,7 @@ export default function Booking() {
       <div className="help">{t("booking.step", { current: step, total: 3 })}</div>
 
       {step === 1 && (
-        <div className="grid grid-2 barber-card-grid">
+        <div className="barber-card-grid">
           {barbers.map((b) => (
             <BarberCard
               key={b.id}
