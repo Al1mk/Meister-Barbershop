@@ -1,36 +1,23 @@
-.barber-card {
-  background-color: #0f0f0f;
-  border: 1px solid rgba(201,168,99,0.3);
-  border-radius: 12px;
-  padding: 1rem;
-  text-align: center;
-  color: #c9a863;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.barber-card{
+  background:#0f0f0f;border:1px solid rgba(201,168,99,.28);
+  border-radius:12px;padding:12px;display:flex;flex-direction:column;
+  gap:10px;transition:.2s ease;box-shadow:0 2px 10px rgba(0,0,0,.25)
 }
-.barber-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 10px rgba(201,168,99,0.1);
+.barber-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(201,168,99,.15)}
+.barber-card-booking{cursor:pointer}
+.barber-card-selected{
+  border-color:#c9a863;
+  box-shadow:0 4px 16px rgba(201,168,99,.35)
 }
-.barber-photo {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 0.8rem;
+.barber-photo{width:100%;height:auto;border-radius:10px;display:block;object-fit:cover;aspect-ratio:4/5}
+.barber-info{display:flex;flex-direction:column;gap:6px}
+.barber-name{color:#c9a863;font-weight:700;font-size:1.05rem}
+.barber-langs{display:flex;gap:6px;flex-wrap:wrap}
+.lang-pill{font-size:.78rem;color:#cfcfcf;background:#1a1a1a;border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:2px 8px}
+.barber-book-btn{
+  background:#c9a863;color:#0f0f0f;padding:8px 16px;border:none;
+  border-radius:8px;font-weight:600;cursor:pointer;transition:.2s ease;
+  margin-top:4px
 }
-.barber-name {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  display: inline-block;
-}
-.barber-role {
-  font-size: 0.85em;
-  color: #a8a8a8;
-  margin-left: 4px;
-  font-weight: 400;
-}
-.barber-service {
-  font-size: 0.95rem;
-  color: #c9a863;
-  opacity: 0.85;
-}
+.barber-book-btn:hover:not(:disabled){background:#d4b574}
+.barber-book-btn:disabled{opacity:.5;cursor:not-allowed}
