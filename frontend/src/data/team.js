@@ -6,31 +6,31 @@
 export const teamMembers = [
   {
     id: 1,
+    name: "Ali",
+    slug: "ali",
+    image: "/images/barbers/ali.jpg",
+    languages: ["Deutsch", "English"],
+  },
+  {
+    id: 2,
     name: "Ehsan",
     slug: "ehsan",
     image: "/images/barbers/ehsan.jpg",
     languages: ["Deutsch"],
   },
   {
-    id: 2,
+    id: 3,
     name: "Iman",
     slug: "iman",
     image: "/images/barbers/iman.jpg",
     languages: ["Deutsch"],
   },
   {
-    id: 3,
+    id: 4,
     name: "Javad",
     slug: "javad",
     image: "/images/barbers/javad.jpg",
     languages: ["Deutsch"],
-  },
-  {
-    id: 4,
-    name: "Ali",
-    slug: "ali",
-    image: "/images/barbers/ali.jpg",
-    languages: ["Deutsch", "English"],
   },
   {
     id: 5,

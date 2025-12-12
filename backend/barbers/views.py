@@ -5,7 +5,7 @@ from .models import Barber
 from .serializers import BarberSerializer
 
 # We want a custom display order instead of relying on creation order.
-BARBER_ORDER = ["Ehsan", "Iman", "Javad", "Ali", "Reza"]
+BARBER_ORDER = ["Ehsan", "Iman", "Javad", "Ali", "Alishan"]
 BARBER_PRIORITY = Case(
     *[
         When(name=name, then=Value(index))
