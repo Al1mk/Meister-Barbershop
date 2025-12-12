@@ -1,39 +1,37 @@
 /**
- * Single source of truth for team member data
- * Used by both Booking page and Our Team section
+ * LOCAL METADATA ONLY - Images and languages for team members.
+ *
+ * CRITICAL: IDs are fetched from API (/api/barbers/) at runtime.
+ * This file contains ONLY display metadata (images, languages).
+ * Matching is done by name/slug to prevent ID drift.
  */
 
-export const teamMembers = [
+export const teamMetadata = [
   {
-    id: 1,
     name: "Ali",
     slug: "ali",
     image: "/images/barbers/ali.jpg",
     languages: ["Deutsch", "English"],
   },
   {
-    id: 2,
     name: "Ehsan",
     slug: "ehsan",
     image: "/images/barbers/ehsan.jpg",
     languages: ["Deutsch"],
   },
   {
-    id: 3,
     name: "Iman",
     slug: "iman",
     image: "/images/barbers/iman.jpg",
     languages: ["Deutsch"],
   },
   {
-    id: 4,
     name: "Javad",
     slug: "javad",
     image: "/images/barbers/javad.jpg",
     languages: ["Deutsch"],
   },
   {
-    id: 5,
     name: "Alishan",
     slug: "alishan",
     image: "/images/barbers/alishan.jpg",
@@ -41,21 +39,28 @@ export const teamMembers = [
   },
 ];
 
-// Export as 'team' for backwards compatibility with Booking page
-export const team = teamMembers;
-
 /**
- * Get team member by name (case-insensitive)
+ * Enrich barber data from API with local metadata (images, languages).
+ * Matches by name (case-insensitive) to avoid ID drift.
  */
-export function getTeamMemberByName(name) {
-  if (!name) {return null;}
-  const normalized = name.trim().toLowerCase();
-  return teamMembers.find(member => member.name.toLowerCase() === normalized) || null;
+export function enrichBarberWithMetadata(barber) {
+  if (!barber || !barber.name) {return barber;}
+  const normalized = barber.name.trim().toLowerCase();
+  const metadata = teamMetadata.find(m => m.name.toLowerCase() === normalized);
+  if (metadata) {
+    return { ...barber, image: metadata.image, languages: metadata.languages, slug: metadata.slug };
+  }
+  return barber;
 }
 
 /**
- * Get all active team members
+ * Enrich array of barbers with metadata
  */
-export function getActiveTeamMembers() {
-  return teamMembers;
+export function enrichBarbersWithMetadata(barbers) {
+  if (!Array.isArray(barbers)) {return [];}
+  return barbers.map(enrichBarberWithMetadata);
 }
+
+// DEPRECATED: Export for backwards compatibility (will be removed)
+// Use enrichBarberWithMetadata + API fetch instead
+export const team = teamMetadata;
