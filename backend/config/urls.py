@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib import admin
-from django.http import JsonResponse
 from django.urls import include, path
 from django.views.generic import RedirectView
 from django.views.static import serve as static_serve
@@ -9,10 +8,12 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from bookings.unsubscribe_views import unsubscribe_followup
 from bookings.webhook_views import mailgun_webhook, sendgrid_webhook
 from bookings.metrics_views import email_metrics
+from config.health_views import health_basic, health_booking
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/api/docs/", permanent=False)),
-    path("health/", lambda request: JsonResponse({"status": "ok"})),
+    path("health/", health_basic, name="health_basic"),
+    path("health/booking/", health_booking, name="health_booking"),
     path("health/email-metrics/", email_metrics, name="email_metrics"),
     path("admin/", admin.site.urls),
     path("unsubscribe-followup/", unsubscribe_followup, name="unsubscribe_followup"),

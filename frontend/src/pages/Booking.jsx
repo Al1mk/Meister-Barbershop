@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { getBarbers, getSlots, createAppointment, getAvailability } from "../lib/api.js";
-import { team } from "../data/team.js";
+import { enrichBarberWithMetadata } from "../data/team.js";
 import BarberCard from "../components/BarberCard.jsx";
 import TimeSlotPicker from "../components/TimeSlotPicker.jsx";
 import CalendarPicker from "../components/CalendarPicker.jsx";
@@ -32,12 +32,8 @@ function normalizeBarber(barber) {
 
 function enrichBarberWithTeamData(barber) {
   if (!barber || !barber.displayName) {return barber;}
-  const slug = barber.displayName.toLowerCase();
-  const teamMember = team.find(t => t.slug === slug);
-  if (teamMember) {
-    return { ...barber, image: teamMember.image, languages: teamMember.languages };
-  }
-  return barber;
+  // Use the centralized metadata enrichment
+  return enrichBarberWithMetadata({ ...barber, name: barber.displayName });
 }
 
 function isoToUTCDate(value) {
